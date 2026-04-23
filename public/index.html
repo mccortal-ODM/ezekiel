@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יחזקאל הנביא — Ortal Digital</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/he.js"></script>
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --secondary: #16213e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --gold: #f5a623;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --orange: #e67e22;
+    --blue: #2980b9;
+    --light: #f8f9fa;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: var(--text); direction: rtl; min-height: 100vh; }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+    color: white; padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-logo { display: flex; align-items: center; gap: 14px; }
+  .header-logo .logo-icon { font-size: 28px; }
+  .header-logo .logo-icon img { height: 44px; width: 44px; object-fit: contain; border-radius: 50%; }
+  .header-title h1 { font-size: 24px; font-weight: 700; }
+  .header-title p { font-size: 14px; opacity: 0.7; margin-top: 3px; }
+  .header-right { text-align: left; font-size: 13px; }
+  .header-right .badge {
+    background: rgba(245,166,35,0.2); border: 1px solid var(--gold);
+    color: var(--gold); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== INTAKE FORM ===== */
+  .intake-wrap {
+    min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .intake-card {
+    background: white; border-radius: 16px; padding: 40px 48px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12); width: 100%; max-width: 660px;
+  }
+  .intake-card h2 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+  .intake-card .intake-sub { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--primary);
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 13px; color: var(--text); transition: border-color 0.2s; background: #f8f9fa;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+  .form-group input:focus { outline: none; border-color: var(--accent); background: white; }
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 10px; margin-bottom: 8px; }
+  .platform-card {
+    border: 2px solid var(--border); border-radius: 10px; padding: 14px 10px;
+    text-align: center; cursor: pointer; transition: all 0.2s; user-select: none;
+  }
+  .platform-card:hover { border-color: var(--accent); }
+  .platform-card.selected { border-color: var(--accent); background: rgba(233,69,96,0.06); }
+  .platform-card .p-icon { font-size: 24px; margin-bottom: 6px; }
+  .platform-card .p-name { font-size: 12px; font-weight: 700; color: var(--primary); }
+  .platform-card .p-check { font-size: 16px; color: var(--accent); margin-top: 4px; opacity: 0; }
+  .platform-card.selected .p-check { opacity: 1; }
+  .account-ids-section { background: #f8f9fa; border-radius: 10px; padding: 16px; margin-top: 4px; }
+  .account-ids-section .section-label { font-size: 11px; font-weight: 700; color: var(--gray);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .aid-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .aid-row:last-child { margin-bottom: 0; }
+  .aid-row .aid-icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+  .aid-row label { font-size: 12px; font-weight: 600; color: var(--text); width: 100px; flex-shrink: 0; }
+  .aid-row input {
+    flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px;
+    font-size: 12px; font-family: 'Courier New', monospace; background: white;
+  }
+  .aid-row input:focus { outline: none; border-color: var(--accent); }
+  .range-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .range-btn {
+    padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px;
+    font-size: 12px; font-weight: 600; cursor: pointer; background: white;
+    color: var(--text); transition: all 0.15s;
+  }
+  .range-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .range-btn.selected { border-color: var(--accent); background: rgba(233,69,96,0.08); color: var(--accent); }
+  .biz-btn {
+    padding: 10px 24px; border: 2px solid var(--border); border-radius: 20px;
+    font-size: 14px; font-weight: 700; cursor: pointer; background: white;
+    color: var(--text); transition: all 0.15s; font-family: inherit;
+  }
+  .biz-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .biz-btn.selected { border-color: var(--accent); background: rgba(233,69,96,0.08); color: var(--accent); }
+  .flatpickr-wrap {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; background: white; cursor: pointer; transition: border-color 0.15s;
+  }
+  .flatpickr-wrap:focus-within { border-color: var(--accent); }
+  .flatpickr-icon { font-size: 16px; flex-shrink: 0; }
+  .flatpickr-wrap input {
+    border: none; outline: none; font-size: 13px; color: var(--text);
+    background: transparent; cursor: pointer; width: 100%;
+    font-family: 'Segoe UI', Arial, sans-serif; direction: rtl;
+  }
+  .flatpickr-wrap input::placeholder { color: var(--gray); }
+  .flatpickr-calendar { font-family: 'Segoe UI', Arial, sans-serif !important; border-radius: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important; border: none !important; direction: rtl; }
+  .flatpickr-months { background: var(--primary) !important; border-radius: 12px 12px 0 0 !important; }
+  .flatpickr-month { color: white !important; }
+  .flatpickr-current-month { color: white !important; font-size: 14px !important; }
+  .flatpickr-current-month .flatpickr-monthDropdown-months { color: white !important; background: transparent !important; }
+  .flatpickr-current-month input.cur-year { color: white !important; }
+  .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: white !important; }
+  .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: var(--gold) !important; }
+  .flatpickr-weekdays { background: var(--secondary) !important; }
+  .flatpickr-weekday { color: rgba(255,255,255,0.7) !important; font-size: 11px !important; }
+  .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange { background: var(--accent) !important; border-color: var(--accent) !important; color: white !important; }
+  .flatpickr-day.inRange { background: rgba(233,69,96,0.12) !important; border-color: transparent !important; color: var(--accent) !important; }
+  .flatpickr-day.today { border-color: var(--accent) !important; }
+  .flatpickr-day:hover { background: rgba(233,69,96,0.08) !important; border-color: var(--accent) !important; }
+  .flatpickr-day.startRange.endRange { border-radius: 50% !important; }
+  .flatpickr-day.startRange { border-radius: 50% 0 0 50% !important; }
+  .flatpickr-day.endRange { border-radius: 0 50% 50% 0 !important; }
+  .review-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .review-type-card { border: 2px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: all 0.2s; }
+  .review-type-card:hover { border-color: var(--blue); }
+  .review-type-card.selected { border-color: var(--blue); background: rgba(41,128,185,0.05); }
+  .review-type-card .rt-title { font-size: 13px; font-weight: 700; color: var(--primary); }
+  .review-type-card .rt-desc { font-size: 11px; color: var(--gray); margin-top: 3px; }
+  .btn-run {
+    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), #c0392b);
+    color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s; margin-top: 24px;
+  }
+  .btn-run:hover { opacity: 0.9; }
+
+  /* ===== LOADING ===== */
+  .loading-wrap { min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+  .loading-card { background: white; border-radius: 16px; padding: 48px 56px; box-shadow: 0 8px 40px rgba(0,0,0,0.12); width: 100%; max-width: 520px; text-align: center; }
+  .loading-card .spinner-wrap { margin-bottom: 28px; }
+  .spinner { width: 56px; height: 56px; border: 4px solid #f0f2f5; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-card h2 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+  .loading-card .loading-sub { font-size: 13px; color: var(--gray); margin-bottom: 28px; }
+  .progress-bar-wrap { background: #f0f2f5; border-radius: 8px; height: 8px; margin-bottom: 24px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--accent), var(--gold)); width: 0%; transition: width 0.5s ease; }
+  .steps-list { text-align: right; list-style: none; }
+  .step-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .step-item:last-child { border-bottom: none; }
+  .step-icon { width: 24px; text-align: center; font-size: 15px; flex-shrink: 0; }
+  .step-text { flex: 1; color: var(--text); }
+  .step-status { font-size: 11px; font-weight: 700; }
+  .step-done { color: var(--green); }
+  .step-running { color: var(--orange); }
+  .step-wait { color: #ccc; }
+
+  /* ===== REPORT ===== */
+  .report-meta { background: var(--primary); color: rgba(255,255,255,0.8); padding: 8px 28px; font-size: 12px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .report-meta .meta-chip { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 3px 10px; font-size: 11px; display: flex; align-items: center; gap: 5px; }
+  .report-meta .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .report-tabs { background: var(--secondary); display: flex; overflow-x: auto; }
+  .report-tab { padding: 14px 22px; color: rgba(255,255,255,0.65); cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .report-tab:hover { color: white; background: rgba(255,255,255,0.05); }
+  .report-tab.active { color: white; border-bottom-color: var(--accent); background: rgba(233,69,96,0.1); }
+  .tab-content { display: none; padding: 24px 28px; }
+  .tab-content.active { display: block; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi-card { background: var(--card-bg); border-radius: 12px; padding: 20px 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-top: 4px solid var(--blue); }
+  .kpi-card.red { border-top-color: var(--red); }
+  .kpi-card.green { border-top-color: var(--green); }
+  .kpi-card.orange { border-top-color: var(--orange); }
+  .kpi-card.gold { border-top-color: var(--gold); }
+  .kpi-label { font-size: 12px; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 800; color: var(--text); }
+  .kpi-sub { font-size: 12px; color: var(--gray); margin-top: 4px; }
+  .kpi-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-top: 6px; }
+  .badge-red { background: #fdecea; color: var(--red); }
+  .badge-green { background: #eafaf1; color: var(--green); }
+  .badge-orange { background: #fef9e7; color: var(--orange); }
+  .section-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; display: flex; align-items: flex-start; gap: 10px; }
+  .alert-red { background: #fdecea; border-right: 4px solid var(--red); color: #c0392b; }
+  .alert-orange { background: #fef9e7; border-right: 4px solid var(--orange); color: #d35400; }
+  .alert-green { background: #eafaf1; border-right: 4px solid var(--green); color: #1e8449; }
+  .alert-icon { font-size: 18px; }
+  .table-wrap { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow-x: auto; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--primary); color: white; padding: 10px 14px; text-align: right; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+  .tag-green { background: #eafaf1; color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .tag-red { background: #fdecea; color: var(--red); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .tag-orange { background: #fef9e7; color: var(--orange); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .audit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .audit-card { background: var(--card-bg); border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .audit-card-title { font-weight: 700; font-size: 14px; margin-bottom: 12px; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+  .audit-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px; }
+  .audit-row:last-child { border-bottom: none; }
+  .audit-check { font-size: 15px; flex-shrink: 0; }
+  .audit-text { flex: 1; }
+  .audit-text strong { display: block; font-weight: 600; }
+  .audit-text span { font-size: 12px; color: var(--gray); }
+  .rec-list { list-style: none; }
+  .rec-item { background: var(--card-bg); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; gap: 14px; align-items: flex-start; border-right: 5px solid var(--blue); }
+  .rec-item.critical { border-right-color: var(--red); }
+  .rec-item.warning { border-right-color: var(--orange); }
+  .rec-item.positive { border-right-color: var(--green); }
+  .rec-num { background: var(--primary); color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .rec-body strong { display: block; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .rec-body p { font-size: 13px; color: var(--gray); line-height: 1.5; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+  .bar-wrap { margin-bottom: 24px; }
+  .chart-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .chart-label { width: 110px; font-size: 12px; font-weight: 600; color: var(--gray); text-align: right; }
+  .bar-container { flex: 1; background: #f0f2f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-left: 10px; font-size: 12px; font-weight: 700; color: white; }
+  .chart-val { width: 90px; font-size: 12px; font-weight: 700; }
+  .footer { background: var(--primary); color: rgba(255,255,255,0.5); text-align: center; padding: 16px; font-size: 12px; }
+  .footer strong { color: var(--gold); }
+  .not-scanned { text-align: center; padding: 60px 20px; color: var(--gray); }
+  .not-scanned .ns-icon { font-size: 48px; margin-bottom: 16px; }
+  .not-scanned p { font-size: 15px; }
+
+  /* ===== CHAT WIDGET ===== */
+  .chat-fab { position: fixed; bottom: 28px; left: 28px; width: 54px; height: 54px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; box-shadow: 0 4px 20px rgba(233,69,96,0.4); z-index: 200; transition: transform 0.2s; }
+  .chat-fab:hover { transform: scale(1.08); }
+  .chat-panel { position: fixed; bottom: 94px; left: 28px; width: 340px; background: white; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); z-index: 200; display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--border); }
+  .chat-panel.open { display: flex; }
+  .chat-header { background: linear-gradient(135deg, var(--primary), var(--accent2)); color: white; padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+  .chat-header .ch-icon { font-size: 18px; }
+  .chat-header .ch-title { font-size: 14px; font-weight: 700; }
+  .chat-header .ch-sub { font-size: 11px; opacity: 0.7; }
+  .chat-messages { flex: 1; max-height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 85%; padding: 9px 12px; border-radius: 12px; font-size: 13px; line-height: 1.45; }
+  .msg.bot { background: #f0f2f5; color: var(--text); align-self: flex-start; border-radius: 4px 12px 12px 12px; }
+  .msg.user { background: var(--accent); color: white; align-self: flex-end; border-radius: 12px 4px 12px 12px; }
+  .chat-input-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); background: #f8f9fa; }
+  .chat-input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 13px; outline: none; font-family: inherit; direction: rtl; }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-send { width: 36px; height: 36px; background: var(--accent); border: none; border-radius: 50%; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .new-scan-btn { position: fixed; top: 90px; left: 16px; background: var(--primary); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12px; cursor: pointer; z-index: 50; opacity: 0.85; }
+  .new-scan-btn:hover { opacity: 1; }
+
+  /* ===== PER-TAB DATE PILLS ===== */
+  .tab-date-bar { display: flex; align-items: center; gap: 8px; padding: 12px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; flex-wrap: wrap; }
+  .tab-date-bar .pill-label { font-size: 12px; font-weight: 700; color: var(--gray); margin-left: 4px; }
+  .date-pill { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 12px; font-weight: 600; color: var(--gray); cursor: pointer; transition: all 0.15s; }
+  .date-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .date-pill.active { border-color: var(--accent); background: rgba(233,69,96,0.08); color: var(--accent); }
+  .tab-loading-overlay { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 32px; color: var(--gray); font-size: 14px; }
+  .tab-spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-logo">
+    <div class="logo-icon"><img src="/logo.png" alt="Ortal Digital"></div>
+    <div class="header-title">
+      <h1>יחזקאל הנביא</h1>
+      <p>Ortal Digital — מערכת אנליזה לפרסום ממומן</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="badge">✦ AI-Powered Audit</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SCREEN 0: INTAKE FORM                      -->
+<!-- ========================================== -->
+<div id="screen-intake" class="screen active">
+  <div class="intake-wrap">
+    <div class="intake-card">
+      <h2>📋 פרטי הסריקה</h2>
+      <p class="intake-sub">הזן מספרי חשבון — יחזקאל ימשוך את הנתונים אוטומטית.</p>
+
+      <div class="form-group">
+        <label>שם לקוח</label>
+        <input id="inp-client-name" type="text" placeholder="לדוגמה: יער הקקאו" oninput="localStorage.setItem('ez_client_name',this.value)">
+      </div>
+
+      <div class="form-group">
+        <label>סוג פעילות</label>
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button id="biz-ecom" class="biz-btn selected" onclick="setBizType('ecom')">🛒 איקומרס</button>
+          <button id="biz-leads" class="biz-btn" onclick="setBizType('leads')">📋 לידים</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>פלטפורמות לסריקה</label>
+        <div class="platform-grid">
+          <div class="platform-card selected" id="plat-meta" onclick="togglePlatform(this)">
+            <div class="p-icon">📘</div>
+            <div class="p-name">Meta Ads</div>
+            <div class="p-check">✓</div>
+          </div>
+          <div class="platform-card selected" id="plat-google" onclick="togglePlatform(this)">
+            <div class="p-icon">🎯</div>
+            <div class="p-name">Google Ads</div>
+            <div class="p-check">✓</div>
+          </div>
+          <div class="platform-card selected" id="plat-ga4" onclick="togglePlatform(this)">
+            <div class="p-icon">📊</div>
+            <div class="p-name">GA4</div>
+            <div class="p-check">✓</div>
+          </div>
+          <div class="platform-card" id="plat-store" onclick="togglePlatform(this)">
+            <div class="p-icon">🛒</div>
+            <div class="p-name">חנות</div>
+            <div class="p-check">✓</div>
+          </div>
+        </div>
+        <div id="store-sub-section" style="display:none;margin-top:10px;background:#f8f9fa;border-radius:10px;padding:12px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">סוג פלטפורמת חנות</div>
+          <div style="display:flex;gap:10px;margin-bottom:14px;">
+            <button id="store-woo" class="biz-btn selected" onclick="setStorePlatform('woocommerce')">🔌 WooCommerce</button>
+            <button id="store-shopify" class="biz-btn" onclick="setStorePlatform('shopify')">🛍️ Shopify</button>
+          </div>
+
+          <!-- WooCommerce credentials -->
+          <div id="store-creds-woo" style="display:flex;flex-direction:column;gap:8px;">
+            <div class="aid-row">
+              <span class="aid-icon">🌐</span>
+              <label>Store URL</label>
+              <input id="inp-woo-url" type="text" placeholder="https://mystore.co.il" oninput="saveStoreCreds()" style="font-size:12px;">
+            </div>
+            <div class="aid-row">
+              <span class="aid-icon">🔑</span>
+              <label>Consumer Key</label>
+              <input id="inp-woo-key" type="text" placeholder="ck_XXXXXXXX" oninput="saveStoreCreds()" style="font-size:12px;">
+            </div>
+            <div class="aid-row">
+              <span class="aid-icon">🔒</span>
+              <label>Consumer Secret</label>
+              <input id="inp-woo-secret" type="password" placeholder="cs_XXXXXXXX" oninput="saveStoreCreds()" style="font-size:12px;">
+            </div>
+          </div>
+
+          <!-- Shopify credentials -->
+          <div id="store-creds-shopify" style="display:none;flex-direction:column;gap:8px;">
+            <div class="aid-row">
+              <span class="aid-icon">🌐</span>
+              <label>Store Domain</label>
+              <input id="inp-shopify-domain" type="text" placeholder="mystore.myshopify.com" oninput="saveStoreCreds()" style="font-size:12px;">
+            </div>
+            <div class="aid-row">
+              <span class="aid-icon">🔑</span>
+              <label>Admin API Token</label>
+              <input id="inp-shopify-token" type="password" placeholder="shpat_XXXXXXXX" oninput="saveStoreCreds()" style="font-size:12px;">
+            </div>
+          </div>
+
+          <div id="store-creds-saved" style="display:none;font-size:11px;color:var(--green);margin-top:8px;">✅ פרטים נשמרו</div>
+        </div>
+      </div>
+
+      <div class="account-ids-section">
+        <div class="section-label">מזהי חשבון</div>
+        <div class="aid-row">
+          <span class="aid-icon">📘</span>
+          <label>Meta Account</label>
+          <input id="inp-meta-id" type="text" placeholder="XXXXXXXXXX" oninput="this.value=this.value.replace(/^act_/,'');localStorage.setItem('ez_meta_id',this.value)">
+        </div>
+        <div class="aid-row">
+          <span class="aid-icon">🎯</span>
+          <label>Google Ads ID</label>
+          <input id="inp-google-id" type="text" placeholder="XXX-XXX-XXXX" oninput="localStorage.setItem('ez_google_id',this.value)">
+        </div>
+        <div class="aid-row">
+          <span class="aid-icon">📊</span>
+          <label>GA4 Property</label>
+          <input id="inp-ga4-id" type="text" placeholder="properties/XXXXXXXXX" oninput="localStorage.setItem('ez_ga4_id',this.value)">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:20px;">
+        <label>טווח תאריכים</label>
+        <div class="range-btns" style="margin-bottom:10px;">
+          <button class="range-btn" onclick="setQuickRange(this, 7)">7 ימים</button>
+          <button class="range-btn" onclick="setQuickRange(this, 30)">30 יום</button>
+          <button class="range-btn selected" onclick="setQuickRange(this, 90)">90 יום</button>
+          <button class="range-btn" onclick="setQuickRange(this, 180)">חצי שנה</button>
+          <button class="range-btn" onclick="setQuickRange(this, 365)">שנה</button>
+        </div>
+        <div class="flatpickr-wrap">
+          <span class="flatpickr-icon">📅</span>
+          <input id="date-range-picker" type="text" placeholder="בחר תקופה מותאמת..." readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>סוג הסקירה</label>
+        <div class="review-type-grid">
+          <div class="review-type-card selected" onclick="selectReviewType(this)">
+            <div class="rt-title">🔍 אודיט מלא</div>
+            <div class="rt-desc">ביצועים, קריאייטיב, תשתית, המלצות</div>
+          </div>
+          <div class="review-type-card" onclick="selectReviewType(this)">
+            <div class="rt-title">⚡ סקירה מהירה</div>
+            <div class="rt-desc">KPIs + בעיות קריטיות בלבד</div>
+          </div>
+          <div class="review-type-card" onclick="selectReviewType(this)">
+            <div class="rt-title">💰 אודיט תקציב</div>
+            <div class="rt-desc">הוצאות, ROAS, יעילות תקציב</div>
+          </div>
+          <div class="review-type-card" onclick="selectReviewType(this)">
+            <div class="rt-title">🎨 אודיט קריאייטיב</div>
+            <div class="rt-desc">עייפות מודעות, ביצועי קריאייטיב</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-run" onclick="runScan()">🚀 התחל סריקה</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SCREEN 1: LOADING                          -->
+<!-- ========================================== -->
+<div id="screen-loading" class="screen">
+  <div class="loading-wrap">
+    <div class="loading-card">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+      <h2>יחזקאל סורק...</h2>
+      <p class="loading-sub" id="loading-sub-text">מכין סריקה...</p>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="scan-progress"></div>
+      </div>
+      <ul class="steps-list">
+        <li class="step-item">
+          <span class="step-icon">○</span>
+          <span class="step-text">Meta — נתוני קמפיינים ו-Insights</span>
+          <span class="step-status step-wait">ממתין</span>
+        </li>
+        <li class="step-item">
+          <span class="step-icon">○</span>
+          <span class="step-text">Google Ads — קמפיינים, המרות, Keywords</span>
+          <span class="step-status step-wait">ממתין</span>
+        </li>
+        <li class="step-item">
+          <span class="step-icon">○</span>
+          <span class="step-text">GA4 — Revenue, Sessions, Device breakdown</span>
+          <span class="step-status step-wait">ממתין</span>
+        </li>
+        <li class="step-item">
+          <span class="step-icon">○</span>
+          <span class="step-text" id="step-store-label">חנות — נתוני הזמנות ומכירות</span>
+          <span class="step-status step-wait">ממתין</span>
+        </li>
+        <li class="step-item">
+          <span class="step-icon">○</span>
+          <span class="step-text">בונה דוח + המלצות</span>
+          <span class="step-status step-wait">ממתין</span>
+        </li>
+      </ul>
+      <p style="margin-top:20px; font-size:12px; color:var(--gray);">⏱ כ-20–40 שניות</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- SCREEN 2: REPORT                           -->
+<!-- ========================================== -->
+<div id="screen-report" class="screen">
+  <button class="new-scan-btn" onclick="showScreen('screen-intake')">← סריקה חדשה</button>
+
+  <div class="report-meta">
+    <div class="meta-chip"><div class="dot"></div> <span id="rpt-client">—</span></div>
+    <div class="meta-chip"><span id="rpt-dates">—</span></div>
+    <div class="meta-chip">📘 Meta &nbsp;|&nbsp; 🎯 Google Ads &nbsp;|&nbsp; 📊 GA4</div>
+    <div class="meta-chip" style="margin-right: auto;">הופק: <span id="rpt-generated"></span> | יחזקאל הנביא</div>
+  </div>
+
+  <div class="report-tabs">
+    <div class="report-tab active" onclick="showTab(this, 'tab-overview')">📈 סקירה כללית</div>
+    <div class="report-tab" onclick="showTab(this, 'tab-meta')">📘 Meta Ads</div>
+    <div class="report-tab" onclick="showTab(this, 'tab-google')">🎯 Google Ads</div>
+    <div class="report-tab" onclick="showTab(this, 'tab-ga4')">📊 GA4</div>
+    <div class="report-tab" id="tab-store-btn" onclick="showTab(this, 'tab-store')" style="display:none;">🛒 חנות</div>
+    <div class="report-tab" id="tab-monthly-btn" onclick="showTab(this, 'tab-monthly')" style="display:none;">📅 מגמות חודשיות</div>
+    <div class="report-tab" onclick="showTab(this, 'tab-recs')">💡 המלצות</div>
+  </div>
+
+  <div id="tab-overview" class="tab-content active"></div>
+  <div id="tab-meta" class="tab-content"></div>
+  <div id="tab-google" class="tab-content"></div>
+  <div id="tab-ga4" class="tab-content"></div>
+  <div id="tab-store" class="tab-content"></div>
+  <div id="tab-monthly" class="tab-content"></div>
+  <div id="tab-recs" class="tab-content"></div>
+
+  <div class="footer">
+    הופק על ידי <strong>יחזקאל הנביא</strong> | Ortal Digital | <span id="footer-date"></span>
+  </div>
+
+  <div class="chat-fab" onclick="toggleChat()">💬</div>
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <span class="ch-icon">🔮</span>
+      <div>
+        <div class="ch-title">יחזקאל — שאל אותי</div>
+        <div class="ch-sub" id="chat-sub-text">מבוסס על נתוני הדוח</div>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg bot">שלום! אני יחזקאל. לאחר הסריקה אוכל לענות על שאלות לגבי הדוח. מה תרצה לדעת?</div>
+    </div>
+    <div class="chat-input-row">
+      <input id="chat-input" class="chat-input" type="text" placeholder="שאל על הדוח..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">↑</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+// SCREEN & TAB NAVIGATION
+// =============================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showTab(btn, id) {
+  document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// =============================================
+// INTAKE INTERACTIONS
+// =============================================
+function togglePlatform(card) {
+  card.classList.toggle('selected');
+  if (card.id === 'plat-store') {
+    document.getElementById('store-sub-section').style.display =
+      card.classList.contains('selected') ? '' : 'none';
+  }
+  // Persist selection state
+  const sel = {};
+  ['plat-meta','plat-google','plat-ga4','plat-store'].forEach(id => {
+    sel[id] = document.getElementById(id)?.classList.contains('selected') || false;
+  });
+  localStorage.setItem('ez_plat_sel', JSON.stringify(sel));
+}
+function selectReviewType(card) {
+  document.querySelectorAll('.review-type-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+function setQuickRange(btn, days) {
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const to = new Date(); to.setDate(to.getDate() - 1);
+  const from = new Date(); from.setDate(from.getDate() - days);
+  if (window._datePicker) {
+    window._datePicker.setDate([from.toISOString().split('T')[0], to.toISOString().split('T')[0]], true);
+  }
+}
+
+function calcDates() {
+  if (window._datePicker) {
+    const sel = window._datePicker.selectedDates;
+    if (sel && sel.length === 2) {
+      return { from: sel[0].toISOString().split('T')[0], to: sel[1].toISOString().split('T')[0] };
+    }
+  }
+  const to = new Date(); to.setDate(to.getDate() - 1);
+  const from = new Date(); from.setDate(from.getDate() - 90);
+  return { from: from.toISOString().split('T')[0], to: to.toISOString().split('T')[0] };
+}
+
+// =============================================
+// INIT
+// =============================================
+window.onload = function() {
+  const toD = new Date(); toD.setDate(toD.getDate() - 1);
+  const fromD = new Date(); fromD.setDate(fromD.getDate() - 90);
+  window._datePicker = flatpickr('#date-range-picker', {
+    mode: 'range', dateFormat: 'Y-m-d',
+    locale: typeof flatpickr.l10ns?.he !== 'undefined' ? 'he' : 'default',
+    showMonths: 2,
+    defaultDate: [fromD.toISOString().split('T')[0], toD.toISOString().split('T')[0]],
+    disableMobile: true,
+    onChange: function(sel) {
+      if (sel.length === 2) document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('selected'));
+    }
+  });
+  const today = new Date().toLocaleDateString('he-IL', { day:'numeric', month:'long', year:'numeric' });
+  const genEl = document.getElementById('rpt-generated');
+  if (genEl) genEl.textContent = today;
+  const footerEl = document.getElementById('footer-date');
+  if (footerEl) footerEl.textContent = today;
+  loadStoreCreds();
+  // Restore saved form fields
+  const sv = k => localStorage.getItem(k) || '';
+  document.getElementById('inp-client-name').value = sv('ez_client_name');
+  document.getElementById('inp-meta-id').value = sv('ez_meta_id');
+  document.getElementById('inp-google-id').value = sv('ez_google_id');
+  document.getElementById('inp-ga4-id').value = sv('ez_ga4_id');
+  // Restore platform selection
+  try {
+    const sel = JSON.parse(localStorage.getItem('ez_plat_sel') || '{}');
+    ['plat-meta','plat-google','plat-ga4','plat-store'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (id in sel) {
+        el.classList.toggle('selected', !!sel[id]);
+      }
+    });
+    // Show/hide store sub-section
+    const storeSelected = document.getElementById('plat-store')?.classList.contains('selected');
+    if (storeSelected) document.getElementById('store-sub-section').style.display = '';
+  } catch(e) {}
+};
+
+// =============================================
+// PROGRESS
+// =============================================
+function updateStep(idx, status) {
+  const steps = document.querySelectorAll('.step-item');
+  if (!steps[idx]) return;
+  const s = steps[idx];
+  s.querySelector('.step-icon').textContent = status === 'done' ? '✅' : status === 'running' ? '⏳' : '○';
+  const statusEl = s.querySelector('.step-status');
+  statusEl.textContent = status === 'done' ? 'הושלם' : status === 'running' ? 'מושך נתונים...' : 'ממתין';
+  statusEl.className = 'step-status ' + (status === 'done' ? 'step-done' : status === 'running' ? 'step-running' : 'step-wait');
+  const doneCount = Array.from(steps).filter(st => st.querySelector('.step-icon').textContent === '✅').length;
+  const bar = document.getElementById('scan-progress');
+  if (bar) bar.style.width = Math.round((doneCount / steps.length) * 100) + '%';
+}
+
+// =============================================
+// RUN SCAN
+// =============================================
+async function runScan() {
+  const clientName = document.getElementById('inp-client-name').value.trim() || 'לקוח';
+  const metaRaw = document.getElementById('inp-meta-id').value.trim().replace(/^act_/, '');
+  const metaId = metaRaw ? 'act_' + metaRaw : '';
+  const googleId = document.getElementById('inp-google-id').value.trim();
+  const ga4Prop = document.getElementById('inp-ga4-id').value.trim();
+  const metaSelected = document.getElementById('plat-meta').classList.contains('selected');
+  const googleSelected = document.getElementById('plat-google').classList.contains('selected');
+  const ga4Selected = document.getElementById('plat-ga4').classList.contains('selected');
+  const { from: dateFrom, to: dateTo } = calcDates();
+
+  showScreen('screen-loading');
+  document.getElementById('loading-sub-text').textContent = `${clientName} | ${dateFrom} – ${dateTo}`;
+  [0, 1, 2, 3].forEach(i => updateStep(i, 'wait'));
+
+  const post = (url, body) => fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  }).then(r => r.json());
+
+  try {
+    // Step 0: Meta
+    updateStep(0, 'running');
+    const metaData = (metaSelected && metaId)
+      ? await post('/api/meta', { accountId: metaId, dateFrom, dateTo }).catch(e => { console.warn('Meta failed:', e); return null; })
+      : null;
+    if (metaData?.error) { console.warn('Meta error:', metaData.error); }
+    updateStep(0, 'done');
+
+    // Step 1: Google Ads
+    updateStep(1, 'running');
+    const googleData = (googleSelected && googleId)
+      ? await post('/api/google-ads', { customerId: googleId, dateFrom, dateTo }).catch(e => { console.warn('Google failed:', e); return null; })
+      : null;
+    if (googleData?.error) { console.warn('Google error:', googleData.error); }
+    updateStep(1, 'done');
+
+    // Step 2: GA4
+    updateStep(2, 'running');
+    const ga4Data = (ga4Selected && ga4Prop)
+      ? await post('/api/ga4', { propertyId: ga4Prop, dateFrom, dateTo }).catch(e => { console.warn('GA4 failed:', e); return null; })
+      : null;
+    if (ga4Data?.error) { console.warn('GA4 error:', ga4Data.error); }
+    updateStep(2, 'done');
+
+    // Step 3: Store (ecommerce) — in parallel with Monthly
+    const storeSelected = document.getElementById('plat-store').classList.contains('selected');
+    const storeLabel = window._storePlatform === 'shopify' ? 'Shopify — נתוני הזמנות ומכירות' : 'WooCommerce — נתוני הזמנות ומכירות';
+    document.getElementById('step-store-label').textContent = storeLabel;
+    updateStep(3, 'running');
+
+    const [storeResult, monthlyResult] = await Promise.allSettled([
+      storeSelected
+        ? post('/api/ecommerce', { platform: window._storePlatform || 'woocommerce', dateFrom, dateTo, credentials: getStoreCreds() })
+            .catch(e => { console.warn('Store failed:', e); return null; })
+        : Promise.resolve(null),
+      post('/api/monthly', {
+        metaId: metaSelected ? metaId : null,
+        googleId: googleSelected ? googleId : null,
+        ga4Id: ga4Selected ? ga4Prop : null,
+        dateFrom, dateTo
+      }).catch(e => { console.warn('Monthly failed:', e); return null; })
+    ]);
+
+    const storeData = storeResult.status === 'fulfilled' ? storeResult.value : null;
+    const monthlyData = monthlyResult.status === 'fulfilled' ? monthlyResult.value : null;
+    if (storeData?.error) console.warn('Store error:', storeData.error);
+    updateStep(3, 'done');
+
+    const cleanMeta = (metaData && !metaData.error) ? metaData : null;
+    const cleanGoogle = (googleData && !googleData.error) ? googleData : null;
+    const cleanGa4 = (ga4Data && !ga4Data.error) ? ga4Data : null;
+    // Pass storeData raw (may include .error) so the store tab can show error details
+    const cleanStore = (storeData && !storeData.error) ? storeData : null;
+
+    window._scanParams = { metaId, googleId, ga4Prop: ga4Prop, metaSelected, googleSelected, ga4Selected };
+    window._tabDays = { meta: null, google: null, ga4: null };
+    buildReport(clientName, cleanMeta, cleanGoogle, cleanGa4, dateFrom, dateTo, monthlyData, window._bizType || 'ecom', cleanStore, storeData, storeSelected);
+    updateStep(3, 'done');
+
+    document.getElementById('rpt-client').textContent = clientName;
+    document.getElementById('rpt-dates').textContent = dateFrom + ' – ' + dateTo;
+    document.getElementById('chat-sub-text').textContent = `מבוסס על נתוני הדוח של ${clientName}`;
+
+    const today = new Date().toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('rpt-generated').textContent = today;
+    document.getElementById('footer-date').textContent = today;
+
+    setTimeout(() => showScreen('screen-report'), 600);
+  } catch (err) {
+    console.error(err);
+    document.querySelector('.loading-card').innerHTML = `
+      <div style="font-size:48px;margin-bottom:16px">❌</div>
+      <h2 style="color:var(--red)">שגיאה בסריקה</h2>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:20px">${err.message}</p>
+      <button onclick="showScreen('screen-intake')" style="padding:12px 24px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">← חזור לטופס</button>
+    `;
+  }
+}
+
+// =============================================
+// REPORT BUILDERS
+// =============================================
+window._bizType = 'ecom';
+window._storePlatform = 'woocommerce';
+function setStorePlatform(type) {
+  window._storePlatform = type;
+  localStorage.setItem('ez_store_type', type);
+  document.getElementById('store-woo').classList.toggle('selected', type === 'woocommerce');
+  document.getElementById('store-shopify').classList.toggle('selected', type === 'shopify');
+  document.getElementById('store-creds-woo').style.display = type === 'woocommerce' ? 'flex' : 'none';
+  document.getElementById('store-creds-shopify').style.display = type === 'shopify' ? 'flex' : 'none';
+}
+function saveStoreCreds() {
+  localStorage.setItem('ez_woo_url', document.getElementById('inp-woo-url').value);
+  localStorage.setItem('ez_woo_key', document.getElementById('inp-woo-key').value);
+  localStorage.setItem('ez_woo_secret', document.getElementById('inp-woo-secret').value);
+  localStorage.setItem('ez_shopify_domain', document.getElementById('inp-shopify-domain').value);
+  localStorage.setItem('ez_shopify_token', document.getElementById('inp-shopify-token').value);
+  const badge = document.getElementById('store-creds-saved');
+  badge.style.display = 'block';
+  setTimeout(() => { badge.style.display = 'none'; }, 2000);
+}
+function loadStoreCreds() {
+  const type = localStorage.getItem('ez_store_type') || 'woocommerce';
+  setStorePlatform(type);
+  document.getElementById('inp-woo-url').value = localStorage.getItem('ez_woo_url') || '';
+  document.getElementById('inp-woo-key').value = localStorage.getItem('ez_woo_key') || '';
+  document.getElementById('inp-woo-secret').value = localStorage.getItem('ez_woo_secret') || '';
+  document.getElementById('inp-shopify-domain').value = localStorage.getItem('ez_shopify_domain') || '';
+  document.getElementById('inp-shopify-token').value = localStorage.getItem('ez_shopify_token') || '';
+}
+function getStoreCreds() {
+  if (window._storePlatform === 'shopify') {
+    return { storeDomain: document.getElementById('inp-shopify-domain').value, accessToken: document.getElementById('inp-shopify-token').value };
+  }
+  return { storeUrl: document.getElementById('inp-woo-url').value, consumerKey: document.getElementById('inp-woo-key').value, consumerSecret: document.getElementById('inp-woo-secret').value };
+}
+function setBizType(type) {
+  window._bizType = type;
+  document.getElementById('biz-ecom').classList.toggle('selected', type === 'ecom');
+  document.getElementById('biz-leads').classList.toggle('selected', type === 'leads');
+}
+
+function metaAction(actions, type) {
+  return parseFloat(actions?.find(a => a.action_type === type)?.value || 0);
+}
+const mic = v => (v || 0) / 1e6;
+const fmt = {
+  ils: v => '₪' + (v >= 1000 ? (v / 1000).toFixed(1) + 'K' : (v || 0).toFixed(0)),
+  pct: v => (v || 0).toFixed(1) + '%',
+  num: v => (v || 0) >= 1000 ? ((v || 0) / 1000).toFixed(1) + 'K' : Math.round(v || 0).toString(),
+  x: v => (v || 0).toFixed(2) + 'x',
+  f: v => (v || 0).toFixed(2)
+};
+
+function computeMetaKPIs(metaData) {
+  const acc = metaData.account;
+  const spend = parseFloat(acc.spend || 0);
+  const impressions = parseFloat(acc.impressions || 0);
+  const reach = parseFloat(acc.reach || 0);
+  const clicks = parseFloat(acc.clicks || 0);
+  const ctr = parseFloat(acc.ctr || 0);
+  const cpc = parseFloat(acc.cpc || 0);
+  const frequency = parseFloat(acc.frequency || 0);
+  const isLeads = window._bizType === 'leads';
+  const purchases = isLeads ? 0 : metaAction(acc.actions, 'purchase');
+  const leads = isLeads ? metaAction(acc.actions, 'lead') + metaAction(acc.actions, 'onsite_conversion.lead_grouped') : 0;
+  const revenue = isLeads ? 0 : parseFloat(acc.action_values?.find(a => a.action_type === 'purchase')?.value || 0);
+  const roas = (!isLeads && spend > 0) ? revenue / spend : 0;
+  const cpa = purchases > 0 ? spend / purchases : 0;
+  const cpl = (isLeads && leads > 0) ? spend / leads : 0;
+  const cvr = clicks > 0 ? ((isLeads ? leads : purchases) / clicks) * 100 : 0;
+  return { spend, impressions, reach, clicks, ctr, cpc, frequency, purchases, leads, revenue, roas, cpa, cpl, cvr, campaigns: metaData.campaigns, pixels: metaData.pixels, ads: metaData.ads || [] };
+}
+
+function computeGoogleTotals(googleData) {
+  let spend = 0, clicks = 0, impressions = 0, conversions = 0, convValue = 0;
+  (googleData.campaigns || []).forEach(r => {
+    spend += mic(r.metrics?.costMicros);
+    clicks += parseInt(r.metrics?.clicks || 0);
+    impressions += parseInt(r.metrics?.impressions || 0);
+    conversions += parseFloat(r.metrics?.conversions || 0);
+    convValue += parseFloat(r.metrics?.conversionsValue || 0);
+  });
+  const ctr = impressions > 0 ? (clicks / impressions) * 100 : 0;
+  const cpc = clicks > 0 ? spend / clicks : 0;
+  const roas = spend > 0 ? convValue / spend : 0;
+  return { spend, clicks, impressions, conversions, convValue, ctr, cpc, roas }; // convValue used as שווי רכישות
+}
+
+function buildReport(clientName, metaData, googleData, ga4Data, dateFrom, dateTo, monthlyData, bizType, storeData, rawStoreData, storeSelected) {
+  window._bizType = bizType || 'ecom';
+  window.metaKPIs = metaData ? computeMetaKPIs(metaData) : null;
+  window.googleTotals = googleData ? computeGoogleTotals(googleData) : null;
+  window._ga4DataFull = ga4Data;
+  window._googleDataRaw = googleData;
+  window._storeData = storeData || null;
+  const metaKPIs = window.metaKPIs;
+  const googleTotals = window.googleTotals;
+  const ga4Overview = ga4Data ? ga4Data.overview : null;
+  window._reportContext = buildContext(clientName, metaKPIs, googleTotals, ga4Overview, dateFrom, dateTo, storeData);
+  document.getElementById('tab-overview').innerHTML = buildOverview(metaKPIs, googleTotals, ga4Overview, dateFrom, dateTo, storeData || rawStoreData);
+  document.getElementById('tab-meta').innerHTML = buildMetaTab(metaData, metaKPIs);
+  document.getElementById('tab-google').innerHTML = buildGoogleTab(googleData, googleTotals);
+  document.getElementById('tab-ga4').innerHTML = buildGA4Tab(ga4Data);
+  document.getElementById('tab-recs').innerHTML = buildRecsTab(metaKPIs, googleData, ga4Data);
+
+  // Store tab — show even on error so user sees the error message
+  window._lastMetaSpend = metaKPIs?.spend || 0;
+  window._lastGoogleSpend = googleTotals?.spend || 0;
+  const storeTabBtn = document.getElementById('tab-store-btn');
+  const storeTab = document.getElementById('tab-store');
+  if (storeSelected) {
+    // Show tab always when user selected store (even on error)
+    storeTab.innerHTML = buildStoreTab(storeData, ga4Data, rawStoreData);
+    if (storeTabBtn) storeTabBtn.style.display = '';
+  } else if (storeData) {
+    storeTab.innerHTML = buildStoreTab(storeData, ga4Data, rawStoreData);
+    if (storeTabBtn) storeTabBtn.style.display = '';
+  } else {
+    if (storeTabBtn) storeTabBtn.style.display = 'none';
+    if (storeTab) storeTab.innerHTML = '';
+  }
+  const daySpan = dateFrom && dateTo ? Math.round((new Date(dateTo) - new Date(dateFrom)) / 86400000) : 0;
+  const monthlyBtn = document.getElementById('tab-monthly-btn');
+  const monthlyTab = document.getElementById('tab-monthly');
+  if (monthlyData && daySpan >= 45) {
+    monthlyTab.innerHTML = buildMonthlyTab(monthlyData, dateFrom, dateTo);
+    if (monthlyBtn) monthlyBtn.style.display = '';
+  } else {
+    if (monthlyBtn) monthlyBtn.style.display = 'none';
+    if (monthlyTab) monthlyTab.innerHTML = '';
+  }
+  document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.report-tab').classList.add('active');
+  document.getElementById('tab-overview').classList.add('active');
+}
+
+function buildContext(clientName, metaKPIs, googleTotals, ga4Ov, dateFrom, dateTo, storeData) {
+  const lines = [`דוח עבור: ${clientName}`, `תקופה: ${dateFrom} עד ${dateTo}`];
+  if (metaKPIs) lines.push(`Meta — הוצאה: ${fmt.ils(metaKPIs.spend)}, רכישות: ${metaKPIs.purchases}, ROAS: ${fmt.x(metaKPIs.roas)}, Frequency: ${fmt.f(metaKPIs.frequency)}, CPA: ${fmt.ils(metaKPIs.cpa)}`);
+  if (googleTotals) lines.push(`Google Ads — הוצאה: ${fmt.ils(googleTotals.spend)}, קליקים: ${fmt.num(googleTotals.clicks)}, ROAS: ${fmt.x(googleTotals.roas)}, CPC: ${fmt.ils(googleTotals.cpc)}`);
+  if (ga4Ov) lines.push(`GA4 — הכנסה: ${fmt.ils(ga4Ov.totalRevenue)}, Sessions: ${fmt.num(ga4Ov.sessions)}, CVR: ${fmt.pct((ga4Ov.conversions / ga4Ov.sessions) * 100)}`);
+  if (storeData?.summary) lines.push(`חנות (${storeData.platform}) — הכנסה: ${fmt.ils(storeData.summary.revenue)}, הזמנות: ${storeData.summary.orders}, AOV: ${fmt.ils(storeData.summary.aov)}`);
+  return lines.join('\n');
+}
+
+function buildOverview(metaKPIs, googleTotals, ga4Ov, dateFrom, dateTo, storeData) {
+  if (!metaKPIs && !googleTotals && !ga4Ov && !storeData) return `<div class="not-scanned"><div class="ns-icon">📭</div><p>לא נסרקה אף פלטפורמה</p></div>`;
+
+  const totalSpend = (metaKPIs?.spend || 0) + (googleTotals?.spend || 0);
+  const totalRevenue = (metaKPIs?.revenue || 0) + (googleTotals?.convValue || 0);
+  const ga4Revenue = ga4Ov?.totalRevenue || 0;
+  const combinedROAS = totalSpend > 0 ? totalRevenue / totalSpend : 0;
+  const metaFreq = metaKPIs?.frequency || 0;
+
+  const isLeads = window._bizType === 'leads';
+
+  // ---- Health score ----
+  let healthScore = 100;
+  const positives = [];
+  const negatives = [];
+
+  if (metaKPIs) {
+    if (!isLeads) {
+      if (metaKPIs.roas >= 3.5) { positives.push(`ROAS Meta ${fmt.x(metaKPIs.roas)} — מצוין`); }
+      else if (metaKPIs.roas < 2 && metaKPIs.spend > 0) { negatives.push(`ROAS Meta ${fmt.x(metaKPIs.roas)} — נמוך מ-2`); healthScore -= 20; }
+    } else {
+      if (metaKPIs.cpl > 0 && metaKPIs.cpl < 50) { positives.push(`CPL Meta ${fmt.ils(metaKPIs.cpl)} — מצוין`); }
+      else if (metaKPIs.cpl > 200 && metaKPIs.spend > 0) { negatives.push(`CPL Meta ${fmt.ils(metaKPIs.cpl)} — גבוה`); healthScore -= 20; }
+    }
+
+    if (metaFreq > 6) { negatives.push(`Frequency Meta ${fmt.f(metaFreq)} — קריטי, עייפות קריאייטיב`); healthScore -= 25; }
+    else if (metaFreq > 4) { negatives.push(`Frequency Meta ${fmt.f(metaFreq)} — גבוה, מומלץ רענון`); healthScore -= 10; }
+    else if (metaFreq > 0) { positives.push(`Frequency Meta ${fmt.f(metaFreq)} — תקין`); }
+
+    if (metaKPIs.cvr > 3) { positives.push(`יחס המרה Meta ${fmt.pct(metaKPIs.cvr)} — מצוין`); }
+    if (metaKPIs.pixels?.length > 0) { positives.push(`Pixel Meta פעיל`); }
+  }
+
+  if (googleTotals) {
+    if (!isLeads) {
+      if (googleTotals.roas >= 3.5) { positives.push(`ROAS Google ${fmt.x(googleTotals.roas)} — מצוין`); }
+      else if (googleTotals.roas < 2 && googleTotals.spend > 0) { negatives.push(`ROAS Google ${fmt.x(googleTotals.roas)} — נמוך מ-2`); healthScore -= 20; }
+    } else {
+      const gCPL = googleTotals.conversions > 0 ? googleTotals.spend / googleTotals.conversions : 0;
+      if (gCPL > 0 && gCPL < 50) { positives.push(`CPL Google ${fmt.ils(gCPL)} — מצוין`); }
+      else if (gCPL > 200 && googleTotals.spend > 0) { negatives.push(`CPL Google ${fmt.ils(gCPL)} — גבוה`); healthScore -= 20; }
+    }
+    if (googleTotals.ctr > 5) { positives.push(`CTR Google ${fmt.pct(googleTotals.ctr)} — גבוה`); }
+    else if (googleTotals.ctr < 2 && googleTotals.spend > 0) { negatives.push(`CTR Google ${fmt.pct(googleTotals.ctr)} — נמוך`); healthScore -= 10; }
+  }
+
+  if (ga4Ov) {
+    const cvr = ga4Ov.sessions > 0 ? (ga4Ov.conversions / ga4Ov.sessions) * 100 : 0;
+    if (cvr > 3) { positives.push(`CVR אתר ${fmt.pct(cvr)} — מצוין`); }
+    else if (cvr < 1 && ga4Ov.sessions > 0) { negatives.push(`CVR אתר ${fmt.pct(cvr)} — נמוך`); healthScore -= 15; }
+    if (ga4Ov.bounceRate > 0.6) { negatives.push(`Bounce Rate ${fmt.pct(ga4Ov.bounceRate * 100)} — גבוה`); healthScore -= 10; }
+  }
+
+  healthScore = Math.max(0, Math.min(100, healthScore));
+  const healthColor = healthScore >= 75 ? '#27ae60' : healthScore >= 50 ? '#e67e22' : '#e74c3c';
+  const healthLabel = healthScore >= 75 ? 'טוב' : healthScore >= 50 ? 'בינוני' : 'דורש טיפול';
+
+  // ---- KPI cards ----
+  const totalLeads = (metaKPIs?.leads || 0) + (googleTotals?.conversions || 0);
+  const totalCPL = totalLeads > 0 ? totalSpend / totalLeads : 0;
+  let kpiCards = '';
+  if (totalSpend > 0) kpiCards += `<div class="kpi-card"><div class="kpi-label">הוצאה כוללת</div><div class="kpi-value">${fmt.ils(totalSpend)}</div><div class="kpi-sub">${metaKPIs ? 'Meta ' + fmt.ils(metaKPIs.spend) : ''}${googleTotals ? ' + Google ' + fmt.ils(googleTotals.spend) : ''}</div></div>`;
+  if (!isLeads) {
+    if (totalRevenue > 0) kpiCards += `<div class="kpi-card green"><div class="kpi-label">שווי רכישות כולל</div><div class="kpi-value">${fmt.ils(totalRevenue)}</div><div class="kpi-sub">${metaKPIs ? 'Meta ' + fmt.ils(metaKPIs.revenue) : ''}${googleTotals ? ' + Google ' + fmt.ils(googleTotals.convValue) : ''}</div></div>`;
+    if (ga4Revenue > 0) kpiCards += `<div class="kpi-card green"><div class="kpi-label">שווי רכישות (GA4)</div><div class="kpi-value">${fmt.ils(ga4Revenue)}</div><div class="kpi-sub">ייחוס Session Campaign</div></div>`;
+    const ga4ROAS = totalSpend > 0 && ga4Revenue > 0 ? ga4Revenue / totalSpend : combinedROAS;
+    const roasBase = ga4Revenue > 0 ? ga4ROAS : combinedROAS;
+    if (roasBase > 0) kpiCards += `<div class="kpi-card ${roasBase >= 3.5 ? 'green' : roasBase >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS כולל (GA4 בסיס)</div><div class="kpi-value">${fmt.x(roasBase)}</div><div class="kpi-badge ${roasBase >= 3.5 ? 'badge-green' : roasBase >= 2 ? 'badge-orange' : 'badge-red'}">${roasBase >= 3.5 ? 'מצוין' : roasBase >= 2 ? 'בינוני' : 'נמוך'}</div></div>`;
+    if (metaKPIs) kpiCards += `<div class="kpi-card gold"><div class="kpi-label">רכישות Meta</div><div class="kpi-value">${fmt.num(metaKPIs.purchases)}</div><div class="kpi-sub">CPA: ${fmt.ils(metaKPIs.cpa)}</div></div>`;
+    if (googleTotals) kpiCards += `<div class="kpi-card ${googleTotals.roas >= 3.5 ? 'green' : googleTotals.roas > 0 ? 'orange' : ''}"><div class="kpi-label">ROAS Google</div><div class="kpi-value">${fmt.x(googleTotals.roas)}</div><div class="kpi-sub">המרות: ${fmt.num(googleTotals.conversions)}</div></div>`;
+  } else {
+    if (totalLeads > 0) kpiCards += `<div class="kpi-card gold"><div class="kpi-label">לידים כולל</div><div class="kpi-value">${fmt.num(totalLeads)}</div><div class="kpi-sub">${metaKPIs ? 'Meta ' + fmt.num(metaKPIs.leads) : ''}${googleTotals ? ' + Google ' + fmt.num(googleTotals.conversions) : ''}</div></div>`;
+    if (totalCPL > 0) kpiCards += `<div class="kpi-card ${totalCPL < 50 ? 'green' : totalCPL < 200 ? 'orange' : 'red'}"><div class="kpi-label">CPL ממוצע</div><div class="kpi-value">${fmt.ils(totalCPL)}</div><div class="kpi-sub">עלות לליד</div></div>`;
+    if (metaKPIs) kpiCards += `<div class="kpi-card"><div class="kpi-label">לידים Meta</div><div class="kpi-value">${fmt.num(metaKPIs.leads)}</div><div class="kpi-sub">CPL: ${fmt.ils(metaKPIs.cpl)}</div></div>`;
+    if (googleTotals) kpiCards += `<div class="kpi-card"><div class="kpi-label">לידים Google</div><div class="kpi-value">${fmt.num(googleTotals.conversions)}</div><div class="kpi-sub">CPL: ${fmt.ils(googleTotals.conversions > 0 ? googleTotals.spend / googleTotals.conversions : 0)}</div></div>`;
+  }
+
+  if (storeData?.summary) {
+    const s = storeData.summary;
+    const platformIcon = storeData.platform === 'shopify' ? '🛍️' : '🔌';
+    kpiCards += `<div class="kpi-card green"><div class="kpi-label">${platformIcon} הכנסת חנות</div><div class="kpi-value">${fmt.ils(s.revenue)}</div><div class="kpi-sub">${s.orders} הזמנות | AOV ${fmt.ils(s.aov)}</div></div>`;
+    if (totalSpend > 0) {
+      const storeROAS = s.revenue / totalSpend;
+      kpiCards += `<div class="kpi-card ${storeROAS >= 3.5 ? 'green' : storeROAS >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS מול חנות</div><div class="kpi-value">${fmt.x(storeROAS)}</div><div class="kpi-sub">הכנסת חנות / הוצ׳ פרסום</div></div>`;
+    }
+  }
+
+  // ---- Spend bars ----
+  const metaPct = totalSpend > 0 ? Math.round((metaKPIs?.spend || 0) / totalSpend * 100) : 0;
+  const googlePct = totalSpend > 0 ? Math.round((googleTotals?.spend || 0) / totalSpend * 100) : 0;
+  let spendBars = '';
+  if (metaKPIs) spendBars += `<div class="chart-row"><div class="chart-label">Meta Ads</div><div class="bar-container"><div class="bar-fill" style="width:${metaPct}%;background:#3b5998;">${metaPct}%</div></div><div class="chart-val">${fmt.ils(metaKPIs.spend)}</div></div>`;
+  if (googleTotals) spendBars += `<div class="chart-row"><div class="chart-label">Google Ads</div><div class="bar-container"><div class="bar-fill" style="width:${googlePct}%;background:#ea4335;">${googlePct}%</div></div><div class="chart-val">${fmt.ils(googleTotals.spend)}</div></div>`;
+
+  // ---- Positives / Negatives ----
+  const posHtml = positives.map(p => `<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #e8f5e9;font-size:13px;"><span style="color:#27ae60;flex-shrink:0;">✅</span><span>${p}</span></div>`).join('');
+  const negHtml = negatives.map(n => `<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #fdecea;font-size:13px;"><span style="color:#e74c3c;flex-shrink:0;">🔴</span><span>${n}</span></div>`).join('');
+
+  return `
+    <div class="section-title">📊 KPIs מרכזיים — כל הפלטפורמות</div>
+    <div class="kpi-grid">${kpiCards}</div>
+
+    ${spendBars ? `<div class="section-title">💸 חלוקת הוצאות לפי פלטפורמה</div><div class="bar-wrap">${spendBars}</div>` : ''}
+
+    <div class="section-title">🏥 מצב בריאות החשבון</div>
+    <div style="background:white;border-radius:12px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+        <div style="width:72px;height:72px;border-radius:50%;background:${healthColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:22px;font-weight:800;color:white;">${healthScore}</span>
+        </div>
+        <div>
+          <div style="font-size:20px;font-weight:800;color:${healthColor};">${healthLabel}</div>
+          <div style="font-size:13px;color:var(--gray);margin-top:2px;">ציון בריאות כולל מתוך 100</div>
+          <div style="background:#f0f2f5;border-radius:6px;height:8px;width:200px;margin-top:8px;overflow:hidden;">
+            <div style="height:100%;width:${healthScore}%;background:${healthColor};border-radius:6px;transition:width 0.6s;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="background:#f8fffe;border-radius:8px;padding:14px;border:1px solid #d4edda;">
+          <div style="font-size:12px;font-weight:700;color:#27ae60;margin-bottom:8px;text-transform:uppercase;">✅ נקודות חיוביות</div>
+          ${posHtml || '<div style="font-size:13px;color:var(--gray);padding:4px 0;">לא זוהו נקודות חיוביות</div>'}
+        </div>
+        <div style="background:#fff8f8;border-radius:8px;padding:14px;border:1px solid #f5c6cb;">
+          <div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:8px;text-transform:uppercase;">🔴 נקודות לשיפור</div>
+          ${negHtml || '<div style="font-size:13px;color:var(--gray);padding:4px 0;">לא זוהו בעיות</div>'}
+        </div>
+      </div>
+    </div>`;
+}
+
+function buildMetaTab(metaData, metaKPIs) {
+  const days = window._tabDays?.meta || null;
+  if (!metaData || !metaKPIs) return buildDatePills('meta', days) + `<div class="not-scanned"><div class="ns-icon">📘</div><p>Meta Ads — לא נסרק</p></div>`;
+  return buildDatePills('meta', days) + buildMetaTabBody(metaData, metaKPIs);
+}
+function buildMetaTabBody(metaData, metaKPIs) {
+  if (!metaData || !metaKPIs) return `<div class="not-scanned"><div class="ns-icon">📘</div><p>אין נתונים</p></div>`;
+
+  const isLeads = window._bizType === 'leads';
+  const roasClass = metaKPIs.roas >= 3.5 ? 'green' : metaKPIs.roas >= 2 ? 'orange' : 'red';
+  const roasBadge = metaKPIs.roas >= 3.5 ? `<div class="kpi-badge badge-green">מצוין</div>` : metaKPIs.roas >= 2 ? `<div class="kpi-badge badge-orange">בינוני</div>` : `<div class="kpi-badge badge-red">נמוך</div>`;
+  const cplClass = metaKPIs.cpl < 50 ? 'green' : metaKPIs.cpl < 200 ? 'orange' : 'red';
+
+  // Campaigns — hide zero-spend, color rows by performance
+  let campRows = '';
+  const activeCamps = (metaKPIs.campaigns || []).filter(c => parseFloat(c.spend || 0) > 0);
+  activeCamps.slice(0, 15).forEach(c => {
+    const cSpend = parseFloat(c.spend || 0);
+    const cPurchases = metaAction(c.actions, 'purchase');
+    const cLeads = metaAction(c.actions, 'lead') + metaAction(c.actions, 'onsite_conversion.lead_grouped');
+    const cConv = isLeads ? cLeads : cPurchases;
+    const cRevenue = parseFloat(c.action_values?.find(a => a.action_type === 'purchase')?.value || 0);
+    const cROAS = cSpend > 0 ? cRevenue / cSpend : 0;
+    const cFreq = parseFloat(c.frequency || 0);
+    const cCPx = cConv > 0 ? cSpend / cConv : 0;
+    if (isLeads) {
+      const rowColor = cCPx > 0 && cCPx < 50 ? 'background:#f0faf4;' : cCPx > 200 ? 'background:#fff5f5;' : cFreq > 6 ? 'background:#fff5f5;' : '';
+      const statusTag = cFreq > 6 ? `<span class="tag-red">Freq קריטי ${fmt.f(cFreq)}</span>` : cFreq > 4 ? `<span class="tag-orange">Freq גבוה ${fmt.f(cFreq)}</span>` : cCPx < 50 && cCPx > 0 ? `<span class="tag-green">CPL מצוין</span>` : cCPx > 200 ? `<span class="tag-red">CPL גבוה</span>` : `<span class="tag-green">תקין</span>`;
+      campRows += `<tr style="${rowColor}"><td>${c.campaign_name || '—'}</td><td>${fmt.ils(cSpend)}</td><td>${fmt.num(cLeads)}</td><td>${cCPx > 0 ? fmt.ils(cCPx) : '—'}</td><td>${fmt.f(cFreq)}</td><td>${statusTag}</td></tr>`;
+    } else {
+      const rowColor = cROAS >= 3.5 ? 'background:#f0faf4;' : cROAS > 0 && cROAS < 2 ? 'background:#fff5f5;' : cFreq > 6 ? 'background:#fff5f5;' : '';
+      const statusTag = cFreq > 6 ? `<span class="tag-red">Freq קריטי ${fmt.f(cFreq)}</span>` : cFreq > 4 ? `<span class="tag-orange">Freq גבוה ${fmt.f(cFreq)}</span>` : cROAS >= 3.5 ? `<span class="tag-green">ROAS מצוין</span>` : cROAS < 2 && cSpend > 0 ? `<span class="tag-red">ROAS נמוך</span>` : `<span class="tag-green">תקין</span>`;
+      campRows += `<tr style="${rowColor}"><td>${c.campaign_name || '—'}</td><td>${fmt.ils(cSpend)}</td><td>${fmt.num(cPurchases)}</td><td>${fmt.ils(cRevenue)}</td><td>${cCPx > 0 ? fmt.ils(cCPx) : '—'}</td><td>${fmt.x(cROAS)}</td><td>${fmt.f(cFreq)}</td><td>${statusTag}</td></tr>`;
+    }
+  });
+
+  // Top 10 ads creative analysis
+  let adsRows = '';
+  const activeAds = (metaKPIs.ads || []).filter(a => parseFloat(a.spend || 0) > 0).slice(0, 10);
+  activeAds.forEach((a, i) => {
+    const aSpend = parseFloat(a.spend || 0);
+    const aPurchases = metaAction(a.actions, 'purchase');
+    const aLeads = metaAction(a.actions, 'lead') + metaAction(a.actions, 'onsite_conversion.lead_grouped');
+    const aRevenue = parseFloat(a.action_values?.find(x => x.action_type === 'purchase')?.value || 0);
+    const aROAS = aSpend > 0 ? aRevenue / aSpend : 0;
+    const aCPL = isLeads && aLeads > 0 ? aSpend / aLeads : 0;
+    const aCTR = parseFloat(a.ctr || 0) * 100;
+    const aFreq = parseFloat(a.frequency || 0);
+    if (isLeads) {
+      const rowColor = aCPL > 0 && aCPL < 50 ? 'background:#f0faf4;' : aCPL > 200 ? 'background:#fff5f5;' : '';
+      const cplTag = aCPL > 0 && aCPL < 50 ? `<span class="tag-green">${fmt.ils(aCPL)}</span>` : aCPL < 200 && aCPL > 0 ? `<span class="tag-orange">${fmt.ils(aCPL)}</span>` : aCPL > 0 ? `<span class="tag-red">${fmt.ils(aCPL)}</span>` : '—';
+      adsRows += `<tr style="${rowColor}"><td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${a.ad_name || '—'}">${i + 1}. ${a.ad_name || '—'}</td><td>${fmt.ils(aSpend)}</td><td>${fmt.num(aLeads)}</td><td>${cplTag}</td><td>${fmt.pct(aCTR)}</td><td>${fmt.f(aFreq)}</td></tr>`;
+    } else {
+      const rowColor = aROAS >= 3.5 ? 'background:#f0faf4;' : aROAS > 0 && aROAS < 2 ? 'background:#fff5f5;' : '';
+      const roasTag = aROAS >= 3.5 ? `<span class="tag-green">${fmt.x(aROAS)}</span>` : aROAS >= 2 ? `<span class="tag-orange">${fmt.x(aROAS)}</span>` : aROAS > 0 ? `<span class="tag-red">${fmt.x(aROAS)}</span>` : '—';
+      adsRows += `<tr style="${rowColor}"><td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${a.ad_name || '—'}">${i + 1}. ${a.ad_name || '—'}</td><td>${fmt.ils(aSpend)}</td><td>${fmt.num(aPurchases)}</td><td>${fmt.ils(aRevenue)}</td><td>${roasTag}</td><td>${fmt.pct(aCTR)}</td><td>${fmt.f(aFreq)}</td></tr>`;
+    }
+  });
+
+  let pixelRows = '';
+  (metaKPIs.pixels || []).forEach(px => {
+    const lastFired = px.last_fired_time ? new Date(px.last_fired_time).toLocaleDateString('he-IL') : 'לא ידוע';
+    pixelRows += `<div class="audit-row"><span class="audit-check">✅</span><div class="audit-text"><strong>${px.name || 'Pixel'}</strong><span>ID: ${px.id} | ירי אחרון: ${lastFired}</span></div></div>`;
+  });
+  if (!pixelRows) pixelRows = `<div class="audit-row"><span class="audit-check">⚠️</span><div class="audit-text"><strong>לא נמצאו Pixels</strong></div></div>`;
+
+  const kpiGridHtml = isLeads ? `
+      <div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(metaKPIs.spend)}</div></div>
+      <div class="kpi-card gold"><div class="kpi-label">לידים</div><div class="kpi-value">${fmt.num(metaKPIs.leads)}</div></div>
+      <div class="kpi-card ${cplClass}"><div class="kpi-label">CPL</div><div class="kpi-value">${fmt.ils(metaKPIs.cpl)}</div><div class="kpi-sub">עלות לליד</div></div>
+      <div class="kpi-card"><div class="kpi-label">חשיפות</div><div class="kpi-value">${fmt.num(metaKPIs.impressions)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">יחס המרה</div><div class="kpi-value">${fmt.pct(metaKPIs.cvr)}</div><div class="kpi-sub">לידים / קליקים</div></div>
+      <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(metaKPIs.ctr * 100)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Reach</div><div class="kpi-value">${fmt.num(metaKPIs.reach)}</div></div>` : `
+      <div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(metaKPIs.spend)}</div></div>
+      <div class="kpi-card green"><div class="kpi-label">רכישות</div><div class="kpi-value">${fmt.num(metaKPIs.purchases)}</div><div class="kpi-sub">CPA ${fmt.ils(metaKPIs.cpa)}</div></div>
+      <div class="kpi-card green"><div class="kpi-label">שווי רכישות</div><div class="kpi-value">${fmt.ils(metaKPIs.revenue)}</div></div>
+      <div class="kpi-card ${roasClass}"><div class="kpi-label">ROAS</div><div class="kpi-value">${fmt.x(metaKPIs.roas)}</div>${roasBadge}</div>
+      <div class="kpi-card"><div class="kpi-label">חשיפות</div><div class="kpi-value">${fmt.num(metaKPIs.impressions)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">יחס המרה</div><div class="kpi-value">${fmt.pct(metaKPIs.cvr)}</div><div class="kpi-sub">רכישות / קליקים</div></div>
+      <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(metaKPIs.ctr * 100)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Reach</div><div class="kpi-value">${fmt.num(metaKPIs.reach)}</div></div>`;
+
+  const campHeaderHtml = isLeads
+    ? `<tr><th>קמפיין</th><th>הוצאה</th><th>לידים</th><th>CPL</th><th>Frequency</th><th>סטטוס</th></tr>`
+    : `<tr><th>קמפיין</th><th>הוצאה</th><th>רכישות</th><th>שווי רכישות</th><th>CPA</th><th>ROAS</th><th>Frequency</th><th>סטטוס</th></tr>`;
+  const campColspan = isLeads ? 6 : 8;
+
+  const adsHeaderHtml = isLeads
+    ? `<tr><th>מודעה</th><th>הוצאה</th><th>לידים</th><th>CPL</th><th>CTR</th><th>Frequency</th></tr>`
+    : `<tr><th>מודעה</th><th>הוצאה</th><th>רכישות</th><th>שווי רכישות</th><th>ROAS</th><th>CTR</th><th>Frequency</th></tr>`;
+
+  const auditPerf = isLeads
+    ? `<div class="audit-row"><span class="audit-check">${metaKPIs.cpl < 50 ? '✅' : metaKPIs.cpl < 200 ? '⚠️' : '🔴'}</span><div class="audit-text"><strong>CPL: ${fmt.ils(metaKPIs.cpl)}</strong><span>לידים: ${fmt.num(metaKPIs.leads)}</span></div></div>`
+    : `<div class="audit-row"><span class="audit-check">${metaKPIs.roas >= 3.5 ? '✅' : metaKPIs.roas >= 2 ? '⚠️' : '🔴'}</span><div class="audit-text"><strong>ROAS: ${fmt.x(metaKPIs.roas)}</strong><span>הכנסה: ${fmt.ils(metaKPIs.revenue)}</span></div></div>`;
+
+  return `
+    <div class="section-title">📘 Meta Ads — ביצועים כלליים</div>
+    <div class="kpi-grid">${kpiGridHtml}</div>
+
+    <div class="audit-grid">
+      <div class="audit-card"><div class="audit-card-title">📍 Pixel & Tracking</div>${pixelRows}</div>
+      <div class="audit-card"><div class="audit-card-title">📊 ביצועי חשבון</div>
+        <div class="audit-row"><span class="audit-check">${metaKPIs.cpc < 5 ? '✅' : '⚠️'}</span><div class="audit-text"><strong>CPC: ${fmt.ils(metaKPIs.cpc)}</strong><span>Clicks: ${fmt.num(metaKPIs.clicks)}</span></div></div>
+        ${auditPerf}
+        <div class="audit-row"><span class="audit-check">${metaKPIs.frequency <= 3 ? '✅' : metaKPIs.frequency <= 5 ? '⚠️' : '🔴'}</span><div class="audit-text"><strong>Frequency: ${fmt.f(metaKPIs.frequency)}</strong><span>${metaKPIs.frequency > 6 ? 'קריטי — רענן קריאייטיב' : metaKPIs.frequency > 3 ? 'גבוה — מעקב' : 'תקין'}</span></div></div>
+      </div>
+    </div>
+
+    <div class="section-title">🎯 קמפיינים — ביצועים</div>
+    <div class="table-wrap">
+      <table>
+        <thead>${campHeaderHtml}</thead>
+        <tbody>${campRows || `<tr><td colspan="${campColspan}" style="text-align:center;color:var(--gray)">אין קמפיינים פעילים עם הוצאה</td></tr>`}</tbody>
+      </table>
+    </div>
+
+    ${adsRows ? `
+    <div class="section-title">🎨 ניתוח קריאייטיב — 10 המודעות המובילות</div>
+    <div class="table-wrap">
+      <table>
+        <thead>${adsHeaderHtml}</thead>
+        <tbody>${adsRows}</tbody>
+      </table>
+    </div>` : ''}`;
+}
+
+function buildGoogleTab(googleData, googleTotals) {
+  const days = window._tabDays?.google || null;
+  if (!googleData || !googleTotals) return buildDatePills('google', days) + `<div class="not-scanned"><div class="ns-icon">🎯</div><p>Google Ads — לא נסרק</p></div>`;
+  return buildDatePills('google', days) + buildGoogleTabBody(googleData, googleTotals);
+}
+function buildGoogleTabBody(googleData, googleTotals) {
+  if (!googleData || !googleTotals) return `<div class="not-scanned"><div class="ns-icon">🎯</div><p>אין נתונים</p></div>`;
+
+  const isLeads = window._bizType === 'leads';
+  const gCPL = googleTotals.conversions > 0 ? googleTotals.spend / googleTotals.conversions : 0;
+  const roasClass = googleTotals.roas >= 3.5 ? 'green' : googleTotals.roas >= 2 ? 'orange' : 'red';
+  const roasBadge = googleTotals.roas >= 3.5 ? `<div class="kpi-badge badge-green">מצוין</div>` : googleTotals.roas >= 2 ? `<div class="kpi-badge badge-orange">בינוני</div>` : googleTotals.spend > 0 ? `<div class="kpi-badge badge-red">נמוך</div>` : '';
+  const cplClass = gCPL < 50 ? 'green' : gCPL < 200 ? 'orange' : 'red';
+
+  // Campaigns — show ENABLED always, show PAUSED only if had spend
+  let campRows = '';
+  (googleData.campaigns || []).forEach(r => {
+    const status = r.campaign?.status || '';
+    const spend = mic(r.metrics?.costMicros);
+    if (status === 'PAUSED' && spend === 0) return;
+    const name = r.campaign?.name || '—';
+    const type = r.campaign?.advertisingChannelType || '';
+    const clicks = Math.round(r.metrics?.clicks || 0);
+    const convs = parseFloat(r.metrics?.conversions || 0);
+    const convVal = parseFloat(r.metrics?.conversionsValue || 0);
+    const roas = spend > 0 ? convVal / spend : 0;
+    const cpl = convs > 0 ? spend / convs : 0;
+    if (isLeads) {
+      const rowColor = cpl > 0 && cpl < 50 ? 'background:#f0faf4;' : cpl > 200 && spend > 0 ? 'background:#fff5f5;' : '';
+      const statusTag = cpl > 0 && cpl < 50 ? `<span class="tag-green">CPL ${fmt.ils(cpl)}</span>` : cpl < 200 && cpl > 0 ? `<span class="tag-orange">CPL ${fmt.ils(cpl)}</span>` : spend > 0 ? `<span class="tag-red">CPL ${fmt.ils(cpl)}</span>` : `<span class="tag-orange">PAUSED</span>`;
+      campRows += `<tr style="${rowColor}"><td>${name}</td><td>${type}</td><td>${fmt.ils(spend)}</td><td>${clicks.toLocaleString('he-IL')}</td><td>${fmt.num(convs)}</td><td>${statusTag}</td></tr>`;
+    } else {
+      const rowColor = roas >= 3.5 ? 'background:#f0faf4;' : roas > 0 && roas < 2 ? 'background:#fff5f5;' : '';
+      const statusTag = roas >= 3.5 ? `<span class="tag-green">ROAS ${fmt.x(roas)}</span>` : roas >= 2 ? `<span class="tag-orange">ROAS ${fmt.x(roas)}</span>` : spend > 0 ? `<span class="tag-red">ROAS ${fmt.x(roas)}</span>` : `<span class="tag-orange">PAUSED</span>`;
+      campRows += `<tr style="${rowColor}"><td>${name}</td><td>${type}</td><td>${fmt.ils(spend)}</td><td>${clicks.toLocaleString('he-IL')}</td><td>${fmt.num(convs)}</td><td>${fmt.ils(convVal)}</td><td>${statusTag}</td></tr>`;
+    }
+  });
+
+  // Keywords — with campaign column
+  let kwRows = '';
+  (googleData.keywords || []).slice(0, 15).forEach(r => {
+    const kw = r.adGroupCriterion?.keyword?.text || '—';
+    const match = r.adGroupCriterion?.keyword?.matchType || '';
+    const camp = r.campaign?.name || '—';
+    const spend = mic(r.metrics?.costMicros);
+    const clicks = Math.round(r.metrics?.clicks || 0);
+    const convs = r.metrics?.conversions || 0;
+    kwRows += `<tr><td>${kw}</td><td>${match}</td><td style="font-size:11px;color:var(--gray);">${camp}</td><td>${clicks.toLocaleString('he-IL')}</td><td>${fmt.ils(spend)}</td><td>${fmt.num(convs)}</td></tr>`;
+  });
+
+  const kpiGridHtml = isLeads ? `
+      <div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(googleTotals.spend)}</div></div>
+      <div class="kpi-card gold"><div class="kpi-label">לידים</div><div class="kpi-value">${fmt.num(googleTotals.conversions)}</div></div>
+      <div class="kpi-card ${cplClass}"><div class="kpi-label">CPL</div><div class="kpi-value">${fmt.ils(gCPL)}</div><div class="kpi-sub">עלות לליד</div></div>
+      <div class="kpi-card"><div class="kpi-label">קליקים</div><div class="kpi-value">${Math.round(googleTotals.clicks).toLocaleString('he-IL')}</div><div class="kpi-sub">CPC: ${fmt.ils(googleTotals.cpc)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(googleTotals.ctr)}</div></div>` : `
+      <div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(googleTotals.spend)}</div></div>
+      <div class="kpi-card ${roasClass}"><div class="kpi-label">ROAS</div><div class="kpi-value">${fmt.x(googleTotals.roas)}</div>${roasBadge}</div>
+      <div class="kpi-card green"><div class="kpi-label">שווי רכישות</div><div class="kpi-value">${fmt.ils(googleTotals.convValue)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">המרות</div><div class="kpi-value">${fmt.num(googleTotals.conversions)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">קליקים</div><div class="kpi-value">${Math.round(googleTotals.clicks).toLocaleString('he-IL')}</div><div class="kpi-sub">CPC: ${fmt.ils(googleTotals.cpc)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(googleTotals.ctr)}</div></div>`;
+
+  const campHeaderHtml = isLeads
+    ? `<tr><th>קמפיין</th><th>סוג</th><th>הוצאה</th><th>קליקים</th><th>לידים</th><th>סטטוס</th></tr>`
+    : `<tr><th>קמפיין</th><th>סוג</th><th>הוצאה</th><th>קליקים</th><th>המרות</th><th>שווי רכישות</th><th>ROAS</th></tr>`;
+  const campColspan = isLeads ? 6 : 7;
+
+  return `
+    <div class="section-title">🎯 Google Ads — ביצועים כלליים</div>
+    <div class="kpi-grid">${kpiGridHtml}</div>
+
+    <div class="section-title">📂 קמפיינים פעילים</div>
+    <div class="table-wrap"><table>
+      <thead>${campHeaderHtml}</thead>
+      <tbody>${campRows || `<tr><td colspan="${campColspan}" style="text-align:center;color:var(--gray)">אין קמפיינים פעילים</td></tr>`}</tbody>
+    </table></div>
+
+    ${kwRows ? `
+    <div class="section-title">🔑 Keywords — ביצועים</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>ביטוי</th><th>Match Type</th><th>קמפיין</th><th>קליקים</th><th>הוצאה</th><th>${isLeads ? 'לידים' : 'המרות'}</th></tr></thead>
+      <tbody>${kwRows}</tbody>
+    </table></div>` : ''}`;
+}
+
+function buildGA4Tab(ga4Data) {
+  const days = window._tabDays?.ga4 || null;
+  if (!ga4Data) return buildDatePills('ga4', days) + `<div class="not-scanned"><div class="ns-icon">📊</div><p>GA4 — לא נסרק</p></div>`;
+  return buildDatePills('ga4', days) + buildGA4TabBody(ga4Data);
+}
+function buildGA4TabBody(ga4Data) {
+  if (!ga4Data) return `<div class="not-scanned"><div class="ns-icon">📊</div><p>אין נתונים</p></div>`;
+  const ov = ga4Data.overview;
+  const sessions = ov.sessions || 0;
+  const revenue = ov.totalRevenue || 0;
+  const conversions = ov.conversions || 0;
+  const cvr = sessions > 0 ? (conversions / sessions) * 100 : 0;
+  const bounceRate = (ov.bounceRate || 0) * 100;
+  const mobileRow = ga4Data.devices.find(d => d.deviceCategory === 'mobile');
+  const desktopRow = ga4Data.devices.find(d => d.deviceCategory === 'desktop');
+  const mobileCVR = (mobileRow?.sessionConversionRate || 0) * 100;
+  const desktopCVR = (desktopRow?.sessionConversionRate || 0) * 100;
+  const mobileGap = desktopCVR > 0 ? desktopCVR / Math.max(mobileCVR, 0.01) : 0;
+  const mobileCVRAlert = mobileGap > 2 ? `<div class="alert alert-red"><span class="alert-icon">🚨</span><div><strong>פער Mobile vs Desktop:</strong> Mobile CVR ${fmt.pct(mobileCVR)} לעומת Desktop ${fmt.pct(desktopCVR)} — פער של x${mobileGap.toFixed(1)}.</div></div>` : '';
+  let deviceRows = '';
+  const deviceEmojis = { mobile: '📱', desktop: '💻', tablet: '📟' };
+  const totalSessions = ga4Data.devices.reduce((a, d) => a + (d.sessions || 0), 0);
+  ga4Data.devices.forEach(d => {
+    const pct = totalSessions > 0 ? Math.round((d.sessions / totalSessions) * 100) : 0;
+    const cvrVal = (d.sessionConversionRate || 0) * 100;
+    const cvrTag = cvrVal >= 3 ? `<span class="tag-green">${fmt.pct(cvrVal)}</span>` : cvrVal >= 1.5 ? `<span class="tag-orange">${fmt.pct(cvrVal)}</span>` : `<span class="tag-red">${fmt.pct(cvrVal)}</span>`;
+    deviceRows += `<tr><td>${deviceEmojis[d.deviceCategory] || '📱'} ${d.deviceCategory}</td><td>${fmt.num(d.sessions)}</td><td>${pct}%</td><td>${fmt.ils(d.totalRevenue)}</td><td>${cvrTag}</td><td>${fmt.pct((d.bounceRate || 0) * 100)}</td></tr>`;
+  });
+  const maxRev = Math.max(...ga4Data.channels.map(c => c.totalRevenue || 0), 1);
+  const totalChannelRev = ga4Data.channels.reduce((a, c) => a + (c.totalRevenue || 0), 0);
+  const channelColors = { 'Paid Social': '#3b5998', 'Paid Search': '#ea4335', 'Organic Search': '#27ae60', 'Direct': '#7f8c8d', 'Email': '#e67e22', 'Referral': '#9b59b6' };
+  let channelBars = '';
+  ga4Data.channels.forEach(ch => {
+    const pct = Math.round((ch.totalRevenue / maxRev) * 100);
+    const revPct = totalChannelRev > 0 ? (ch.totalRevenue / totalChannelRev * 100) : 0;
+    const color = channelColors[ch.sessionDefaultChannelGroup] || '#2980b9';
+    channelBars += `<div class="chart-row"><div class="chart-label">${ch.sessionDefaultChannelGroup || '—'}</div><div class="bar-container"><div class="bar-fill" style="width:${pct}%;background:${color};">${pct > 10 ? fmt.pct(revPct) : ''}</div></div><div class="chart-val">${fmt.ils(ch.totalRevenue)}</div></div>`;
+  });
+  // Source / Medium table
+  let sourceRows = '';
+  (ga4Data.sources || []).filter(s => s.totalRevenue > 0 || s.sessions > 0).sort((a, b) => (b.totalRevenue || 0) - (a.totalRevenue || 0)).slice(0, 20).forEach(s => {
+    const srcCVR = (s.sessionConversionRate || 0) * 100;
+    const aov = s.conversions > 0 ? s.totalRevenue / s.conversions : 0;
+    const cvrTag = srcCVR >= 3 ? `<span class="tag-green">${fmt.pct(srcCVR)}</span>` : srcCVR >= 1 ? `<span class="tag-orange">${fmt.pct(srcCVR)}</span>` : `<span class="tag-red">${fmt.pct(srcCVR)}</span>`;
+    sourceRows += `<tr><td style="font-family:monospace;font-size:12px;">${s.sessionSourceMedium || '—'}</td><td>${fmt.num(s.sessions)}</td><td>${fmt.num(s.conversions)}</td><td>${fmt.ils(s.totalRevenue)}</td><td>${cvrTag}</td><td>${aov > 0 ? fmt.ils(aov) : '—'}</td></tr>`;
+  });
+  // Campaigns (GA4 session attribution)
+  let campaignRows = '';
+  (ga4Data.campaigns || []).filter(c => c.sessionCampaignName && c.sessionCampaignName !== '(not set)').sort((a, b) => (b.totalRevenue || 0) - (a.totalRevenue || 0)).slice(0, 15).forEach(c => {
+    const campCVR = (c.sessionConversionRate || 0) * 100;
+    const aov = c.conversions > 0 ? c.totalRevenue / c.conversions : 0;
+    const cvrTag = campCVR >= 3 ? `<span class="tag-green">${fmt.pct(campCVR)}</span>` : campCVR >= 1 ? `<span class="tag-orange">${fmt.pct(campCVR)}</span>` : `<span class="tag-red">${fmt.pct(campCVR)}</span>`;
+    campaignRows += `<tr><td>${c.sessionCampaignName}</td><td>${fmt.num(c.sessions)}</td><td>${fmt.num(c.conversions)}</td><td>${fmt.ils(c.totalRevenue)}</td><td>${cvrTag}</td><td>${aov > 0 ? fmt.ils(aov) : '—'}</td></tr>`;
+  });
+  return `
+    ${mobileCVRAlert}
+    <div class="section-title">📊 GA4 — ביצועי אתר</div>
+    <div class="kpi-grid">
+      <div class="kpi-card green"><div class="kpi-label">הכנסה</div><div class="kpi-value">${fmt.ils(revenue)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Sessions</div><div class="kpi-value">${fmt.num(sessions)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">CVR כולל</div><div class="kpi-value">${fmt.pct(cvr)}</div></div>
+      <div class="kpi-card ${mobileCVR > 0 && mobileCVR < 1.5 ? 'red' : ''}"><div class="kpi-label">Mobile CVR</div><div class="kpi-value">${fmt.pct(mobileCVR)}</div>${mobileCVR < 1.5 && mobileCVR > 0 ? '<div class="kpi-badge badge-red">נמוך</div>' : ''}</div>
+      <div class="kpi-card ${desktopCVR >= 3 ? 'green' : ''}"><div class="kpi-label">Desktop CVR</div><div class="kpi-value">${fmt.pct(desktopCVR)}</div></div>
+      <div class="kpi-card ${bounceRate > 55 ? 'orange' : ''}"><div class="kpi-label">Bounce Rate</div><div class="kpi-value">${fmt.pct(bounceRate)}</div>${bounceRate > 55 ? '<div class="kpi-badge badge-orange">גבוה</div>' : ''}</div>
+    </div>
+    ${deviceRows ? `<div class="section-title">📱 פירוט לפי מכשיר</div><div class="table-wrap"><table><thead><tr><th>מכשיר</th><th>Sessions</th><th>% Sessions</th><th>הכנסה</th><th>CVR</th><th>Bounce Rate</th></tr></thead><tbody>${deviceRows}</tbody></table></div>` : ''}
+    ${channelBars ? `<div class="section-title">📣 ערוצי תנועה — הכנסה</div><div class="bar-wrap">${channelBars}</div>` : ''}
+    ${sourceRows ? `<div class="section-title">🔗 מקורות מדיה (Source / Medium) — ייחוס Session</div><div class="table-wrap"><table><thead><tr><th>Source / Medium</th><th>Sessions</th><th>רכישות</th><th>הכנסה</th><th>CVR</th><th>AOV</th></tr></thead><tbody>${sourceRows}</tbody></table></div>` : ''}
+    ${campaignRows ? `<div class="section-title">🎯 קמפיינים לפי GA4 (Session Campaign Attribution)</div><div class="table-wrap"><table><thead><tr><th>קמפיין</th><th>Sessions</th><th>רכישות</th><th>הכנסה</th><th>CVR</th><th>AOV</th></tr></thead><tbody>${campaignRows}</tbody></table></div>` : ''}`;
+}
+
+function buildRecsTab(metaKPIs, googleData, ga4Data) {
+  const isLeads = window._bizType === 'leads';
+  const PDF_BTN = `<div style="display:flex;justify-content:flex-start;margin-bottom:20px;">
+    <button onclick="downloadPDFReport()" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;direction:rtl;box-shadow:0 4px 16px rgba(26,26,46,0.3);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">⬇️ הורד דוח PDF</button>
+  </div>`;
+
+  const recs = [];
+  if (metaKPIs) {
+    if (metaKPIs.frequency > 6) recs.push({ level: 'critical', title: '🔴 Frequency קריטי ב-Meta — רענן קריאייטיב מיידית', body: `Frequency ${fmt.f(metaKPIs.frequency)} — מעל 6. הוסף 3–5 קריאייטיבים חדשים והגדל קהל.` });
+    else if (metaKPIs.frequency > 4) recs.push({ level: 'warning', title: '⚠️ Frequency גבוה ב-Meta', body: `Frequency ${fmt.f(metaKPIs.frequency)} — שקול רענון קריאייטיב.` });
+    if (isLeads) {
+      if (metaKPIs.cpl > 0 && metaKPIs.cpl < 50) recs.push({ level: 'positive', title: `✅ CPL Meta ${fmt.ils(metaKPIs.cpl)} — מצוין`, body: `שקול להגדיל תקציב ב-20–30% בקמפיינים עם CPL נמוך.` });
+      else if (metaKPIs.cpl > 200 && metaKPIs.spend > 0) recs.push({ level: 'warning', title: `⚠️ CPL Meta גבוה — ${fmt.ils(metaKPIs.cpl)}`, body: `בדוק targeting, קריאייטיב ודף הנחיתה.` });
+    } else {
+      if (metaKPIs.roas > 5) recs.push({ level: 'positive', title: `✅ ROAS Meta ${fmt.x(metaKPIs.roas)} — מצוין`, body: `שקול להגדיל תקציב ב-20–30% בקמפיינים המובילים.` });
+      else if (metaKPIs.roas < 2 && metaKPIs.spend > 0) recs.push({ level: 'warning', title: '⚠️ ROAS Meta נמוך מ-2', body: `ROAS ${fmt.x(metaKPIs.roas)} — בדוק targeting, קריאייטיב ודף הנחיתה.` });
+    }
+  }
+  if (googleData) {
+    const mpc = (googleData.convActions || []).filter(r => r.conversionAction?.countingType === 'MANY_PER_CLICK');
+    if (mpc.length > 0) recs.push({ level: 'critical', title: '🔴 תקן הגדרת המרות — MANY → ONE_PER_CLICK', body: `${mpc.length} פעולות: ${mpc.map(r => r.conversionAction?.name).join(', ')} — Smart Bidding מקבל אותות מנופחים.` });
+    const gt = computeGoogleTotals(googleData);
+    if (isLeads) {
+      const gCPL = gt.conversions > 0 ? gt.spend / gt.conversions : 0;
+      if (gCPL > 0 && gCPL < 50) recs.push({ level: 'positive', title: `✅ CPL Google ${fmt.ils(gCPL)} — מצוין`, body: `ביצועים מצוינים. שקול להגדיל תקציב ב-20–30%.` });
+      else if (gCPL > 200 && gt.spend > 0) recs.push({ level: 'warning', title: `⚠️ CPL Google גבוה — ${fmt.ils(gCPL)}`, body: `בדוק מיקוד ביטויים ודף הנחיתה.` });
+    } else {
+      if (gt.roas > 5) recs.push({ level: 'positive', title: `✅ ROAS Google ${fmt.x(gt.roas)} — שקול להגדיל תקציב`, body: `ביצועים מצוינים. אם יצא מ-Learning Phase — הגדל ב-20–30%.` });
+      else if (gt.roas < 2 && gt.spend > 0) recs.push({ level: 'warning', title: '⚠️ ROAS Google Ads נמוך', body: `ROAS ${fmt.x(gt.roas)} — בדוק מיקוד ביטויים וצד המשתמש.` });
+    }
+  }
+  if (ga4Data) {
+    const mob = ga4Data.devices.find(d => d.deviceCategory === 'mobile');
+    const desk = ga4Data.devices.find(d => d.deviceCategory === 'desktop');
+    if (mob && desk) {
+      const mCVR = (mob.sessionConversionRate || 0) * 100;
+      const dCVR = (desk.sessionConversionRate || 0) * 100;
+      if (dCVR > 0 && mCVR > 0 && dCVR / mCVR > 2) recs.push({ level: 'critical', title: `🔴 פער Mobile CVR חד — ${fmt.pct(mCVR)} לעומת Desktop ${fmt.pct(dCVR)}`, body: `פער של x${(dCVR / mCVR).toFixed(1)}. בדוק מהירות טעינה ו-UX במובייל.` });
+    }
+  }
+  if (recs.length === 0) return PDF_BTN + `<div class="not-scanned"><div class="ns-icon">💡</div><p>לא נמצאו בעיות מהנתונים שנמשכו.</p></div>`;
+  const order = { critical: 0, warning: 1, positive: 2 };
+  recs.sort((a, b) => order[a.level] - order[b.level]);
+  let html = PDF_BTN + `<div class="section-title">💡 המלצות לפי עדיפות</div><ul class="rec-list">`;
+  recs.forEach((r, i) => { html += `<li class="rec-item ${r.level}"><div class="rec-num">${i + 1}</div><div class="rec-body"><strong>${r.title}</strong><p>${r.body}</p></div></li>`; });
+  html += `</ul>`;
+  return html;
+}
+
+function buildMonthlyTab(monthlyData, dateFrom, dateTo) {
+  const fmtMonth = (ym) => {
+    if (!ym) return '—';
+    const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+    const [y, m] = ym.split('-');
+    return `${months[parseInt(m) - 1]} ${y}`;
+  };
+  const fmtYM = (ym) => { if (!ym) return '—'; if (ym.length === 6) return `${ym.slice(0, 4)}-${ym.slice(4, 6)}`; return ym.slice(0, 7); };
+  const fmt2 = (n) => n?.toLocaleString('he-IL') || '—';
+  const fmtMoney = (n) => n ? '₪' + Math.round(n).toLocaleString('he-IL') : '—';
+  let html = `<div style="padding:20px;"><div class="section-title">📅 מגמות חודשיות — ${dateFrom} עד ${dateTo}</div>`;
+  if (monthlyData.meta?.length > 0) {
+    html += `<div class="table-wrap" style="margin-bottom:24px;"><div style="font-weight:700;font-size:15px;color:var(--primary);margin-bottom:12px;">📘 Meta Ads — חתך חודשי</div><table><thead><tr><th>חודש</th><th>הוצאה</th><th>קליקים</th><th>לידים</th><th>CPA</th></tr></thead><tbody>`;
+    monthlyData.meta.forEach(row => {
+      const spend = parseFloat(row.spend || 0);
+      const clicks = parseInt(row.clicks || 0);
+      const actions = row.actions || [];
+      const leads = parseFloat(actions.find(a => a.action_type === 'lead')?.value || 0) + parseFloat(actions.find(a => a.action_type === 'onsite_conversion.lead_grouped')?.value || 0);
+      const cpa = leads > 0 ? spend / leads : 0;
+      html += `<tr><td>${fmtMonth(row.date_start?.slice(0, 7))}</td><td>${fmtMoney(spend)}</td><td>${fmt2(clicks)}</td><td>${fmt2(leads)}</td><td>${cpa > 0 ? fmtMoney(cpa) : '—'}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  if (monthlyData.google && Object.keys(monthlyData.google).length > 0) {
+    html += `<div class="table-wrap" style="margin-bottom:24px;"><div style="font-weight:700;font-size:15px;color:var(--primary);margin-bottom:12px;">🎯 Google Ads — חתך חודשי</div><table><thead><tr><th>חודש</th><th>הוצאה</th><th>קליקים</th><th>המרות</th><th>CPA</th><th>CTR</th></tr></thead><tbody>`;
+    Object.entries(monthlyData.google).sort().forEach(([month, data]) => {
+      const cpa = data.conversions > 0 ? data.spend / data.conversions : 0;
+      const ctr = data.impressions > 0 ? (data.clicks / data.impressions * 100).toFixed(2) : '—';
+      html += `<tr><td>${fmtMonth(month)}</td><td>${fmtMoney(data.spend)}</td><td>${fmt2(data.clicks)}</td><td>${fmt2(Math.round(data.conversions))}</td><td>${cpa > 0 ? fmtMoney(cpa) : '—'}</td><td>${ctr}%</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  if (monthlyData.ga4?.length > 0) {
+    html += `<div class="table-wrap" style="margin-bottom:24px;"><div style="font-weight:700;font-size:15px;color:var(--primary);margin-bottom:12px;">📊 GA4 — חתך חודשי</div><table><thead><tr><th>חודש</th><th>סשנים</th><th>משתמשים</th><th>המרות</th><th>CVR</th></tr></thead><tbody>`;
+    monthlyData.ga4.sort((a, b) => a.month.localeCompare(b.month)).forEach(row => {
+      const cvr = row.sessions > 0 ? (row.conversions / row.sessions * 100).toFixed(2) : '—';
+      html += `<tr><td>${fmtMonth(fmtYM(row.month))}</td><td>${fmt2(row.sessions)}</td><td>${fmt2(row.users)}</td><td>${fmt2(row.conversions)}</td><td>${cvr}%</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// =============================================
+// STORE TAB
+// =============================================
+function buildStoreTab(storeData, ga4Data, rawStoreData) {
+  if (!storeData) {
+    const errMsg = rawStoreData?.error || null;
+    if (errMsg) {
+      return `<div class="not-scanned">
+        <div class="ns-icon">❌</div>
+        <p style="color:var(--red);font-weight:700;margin-bottom:8px;">שגיאה בחיבור לחנות</p>
+        <p style="font-size:13px;color:var(--gray);max-width:500px;margin:0 auto;direction:ltr;text-align:left;">${errMsg}</p>
+        <p style="font-size:12px;color:var(--gray);margin-top:16px;">בדוק שה-Store URL, Consumer Key ו-Consumer Secret נכונים</p>
+      </div>`;
+    }
+    return `<div class="not-scanned"><div class="ns-icon">🛒</div><p>חנות — לא נסרק</p></div>`;
+  }
+
+  const s = storeData.summary;
+  const isShopify = storeData.platform === 'shopify';
+  const platformName = isShopify ? 'Shopify' : 'WooCommerce';
+  const platformIcon = isShopify ? '🛍️' : '🔌';
+  const totalRevPct = s.revenue > 0;
+
+  // ── KPI Bar ──────────────────────────────────────────────────────────────
+  const aovClass = s.aov > 300 ? 'green' : s.aov > 100 ? '' : 'orange';
+  let kpiHtml = `
+    <div class="kpi-card green"><div class="kpi-label">הכנסה</div><div class="kpi-value">${fmt.ils(s.revenue)}</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">הזמנות</div><div class="kpi-value">${fmt.num(s.orders)}</div></div>
+    <div class="kpi-card ${aovClass}"><div class="kpi-label">AOV ממוצע הזמנה</div><div class="kpi-value">${fmt.ils(s.aov)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">הכנסה נטו</div><div class="kpi-value">${fmt.ils(s.netRevenue)}</div><div class="kpi-sub">לאחר החזרות</div></div>`;
+
+  if (s.avgItems > 0) {
+    kpiHtml += `<div class="kpi-card"><div class="kpi-label">פריטים ממוצע להזמנה</div><div class="kpi-value">${s.avgItems.toFixed(1)}</div></div>`;
+  }
+
+  const adSpend = (window._lastMetaSpend || 0) + (window._lastGoogleSpend || 0);
+  if (adSpend > 0 && s.revenue > 0) {
+    const storeROAS = s.revenue / adSpend;
+    kpiHtml += `<div class="kpi-card ${storeROAS >= 3.5 ? 'green' : storeROAS >= 2 ? 'orange' : 'red'}">
+      <div class="kpi-label">ROAS מול חנות</div><div class="kpi-value">${fmt.x(storeROAS)}</div>
+      <div class="kpi-badge ${storeROAS >= 3.5 ? 'badge-green' : storeROAS >= 2 ? 'badge-orange' : 'badge-red'}">${storeROAS >= 3.5 ? 'מצוין' : storeROAS >= 2 ? 'בינוני' : 'נמוך'}</div>
+    </div>`;
+  }
+
+  // ── 1. Funnel (GA4) ──────────────────────────────────────────────────────
+  const funnel = ga4Data?.funnel;
+  let funnelHtml = '';
+  if (funnel && (funnel.view_item || funnel.add_to_cart || funnel.begin_checkout || funnel.purchase)) {
+    const steps = [
+      { label: 'צפייה במוצר', key: 'view_item', icon: '👁️' },
+      { label: 'הוסף לסל', key: 'add_to_cart', icon: '🛒' },
+      { label: 'התחלת Checkout', key: 'begin_checkout', icon: '💳' },
+      { label: 'רכישה', key: 'purchase', icon: '✅' }
+    ];
+    const vals = steps.map(s => funnel[s.key] || 0);
+    const maxVal = Math.max(...vals, 1);
+
+    let funnelSteps = '';
+    steps.forEach((step, i) => {
+      const v = vals[i];
+      const pct = i > 0 && vals[i - 1] > 0 ? (v / vals[i - 1] * 100).toFixed(1) : null;
+      const barW = Math.round((v / maxVal) * 100);
+      const barColor = i === 3 ? 'var(--green)' : i === 0 ? 'var(--blue)' : '#9b59b6';
+      funnelSteps += `
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:600;">${step.icon} ${step.label}</span>
+            <span style="font-size:13px;font-weight:700;">${fmt.num(v)}</span>
+          </div>
+          <div style="background:#f0f2f5;border-radius:6px;height:12px;overflow:hidden;">
+            <div style="height:100%;width:${barW}%;background:${barColor};border-radius:6px;transition:width 0.4s;"></div>
+          </div>
+          ${pct !== null ? `<div style="font-size:11px;color:var(--gray);margin-top:3px;">המרה משלב קודם: <strong>${pct}%</strong></div>` : ''}
+        </div>`;
+    });
+
+    const overallCVR = vals[0] > 0 ? (vals[3] / vals[0] * 100).toFixed(2) : '0';
+    const cartAbandonment = vals[1] > 0 ? ((1 - vals[3] / vals[1]) * 100).toFixed(1) : null;
+
+    funnelHtml = `
+    <div class="section-title">🔄 פאנל מכירות — ניתוח נפילות</div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">המרה כוללת (View→Buy)</div><div class="kpi-value">${overallCVR}%</div></div>
+      ${cartAbandonment ? `<div class="kpi-card ${parseFloat(cartAbandonment) > 70 ? 'red' : 'orange'}"><div class="kpi-label">נטישת סל</div><div class="kpi-value">${cartAbandonment}%</div><div class="kpi-badge ${parseFloat(cartAbandonment) > 70 ? 'badge-red' : 'badge-orange'}">${parseFloat(cartAbandonment) > 70 ? 'גבוה' : 'בינוני'}</div></div>` : ''}
+    </div>
+    <div class="table-wrap" style="padding:20px 24px;">${funnelSteps}</div>`;
+  }
+
+  // ── 2. Top Products ───────────────────────────────────────────────────────
+  let productRows = '';
+  const totalProdRev = (storeData.topProducts || []).reduce((s, p) => s + p.revenue, 0) || 1;
+  (storeData.topProducts || []).slice(0, 15).forEach((p, i) => {
+    const pct = (p.revenue / totalProdRev * 100).toFixed(1);
+    const revPerUnit = p.revenuePerUnit || (p.quantity > 0 ? p.revenue / p.quantity : 0);
+    productRows += `<tr>
+      <td>${i + 1}. ${p.name || '—'}</td>
+      <td>${fmt.num(p.quantity)}</td>
+      <td>${fmt.ils(p.revenue)}</td>
+      <td>${fmt.ils(revPerUnit)}</td>
+      <td><div style="display:flex;align-items:center;gap:6px;"><div style="width:${Math.round(parseFloat(pct))}px;max-width:80px;height:8px;background:var(--accent);border-radius:4px;"></div>${pct}%</div></td>
+    </tr>`;
+  });
+
+  // ── 3. Categories ─────────────────────────────────────────────────────────
+  let categoryRows = '';
+  const totalCatRev = (storeData.categories || []).reduce((s, c) => s + c.revenue, 0) || 1;
+  (storeData.categories || []).forEach(c => {
+    const pct = (c.revenue / totalCatRev * 100).toFixed(1);
+    categoryRows += `<tr><td>${c.name}</td><td>${fmt.num(c.orders)}</td><td>${fmt.num(c.items)}</td><td>${fmt.ils(c.revenue)}</td><td>${pct}%</td></tr>`;
+  });
+
+  // ── 4. Customer Segments ──────────────────────────────────────────────────
+  const seg = storeData.customerSegments;
+  let segHtml = '';
+  if (seg) {
+    const total = (seg.newCustomers || 0) + (seg.returningCustomers || 0) + (seg.guests || 0) || 1;
+    segHtml = `
+    <div class="section-title">👥 ניתוח לקוחות</div>
+    <div class="kpi-grid">
+      <div class="kpi-card green"><div class="kpi-label">לקוחות חדשים</div><div class="kpi-value">${fmt.num(seg.newCustomers)}</div><div class="kpi-sub">${(seg.newCustomers / total * 100).toFixed(0)}%</div></div>
+      <div class="kpi-card"><div class="kpi-label">לקוחות חוזרים</div><div class="kpi-value">${fmt.num(seg.returningCustomers)}</div><div class="kpi-sub">${(seg.returningCustomers / total * 100).toFixed(0)}%</div></div>
+      <div class="kpi-card"><div class="kpi-label">אורחים</div><div class="kpi-value">${fmt.num(seg.guests)}</div><div class="kpi-sub">${(seg.guests / total * 100).toFixed(0)}%</div></div>
+    </div>`;
+    if (storeData.topCustomers?.length) {
+      let custRows = '';
+      storeData.topCustomers.forEach((c, i) => {
+        custRows += `<tr><td>${i+1}. ${c.name}</td><td>${fmt.num(c.orders)}</td><td>${fmt.ils(c.totalSpent)}</td><td>${fmt.ils(c.aov)}</td></tr>`;
+      });
+      segHtml += `<div class="table-wrap"><table>
+        <thead><tr><th>לקוח</th><th>הזמנות</th><th>סה"כ הוצאה</th><th>AOV</th></tr></thead>
+        <tbody>${custRows}</tbody></table></div>`;
+    }
+  }
+
+  // ── 5. Order Value Distribution ───────────────────────────────────────────
+  const dist = storeData.orderDistribution;
+  let distHtml = '';
+  if (dist) {
+    const totalD = (dist.lt100 + dist.b100_300 + dist.b300_500 + dist.gt500) || 1;
+    const buckets = [
+      { label: 'מתחת ₪100', val: dist.lt100, color: 'var(--red)' },
+      { label: '₪100 – ₪300', val: dist.b100_300, color: 'var(--orange)' },
+      { label: '₪300 – ₪500', val: dist.b300_500, color: 'var(--blue)' },
+      { label: 'מעל ₪500', val: dist.gt500, color: 'var(--green)' }
+    ];
+    let bucketCards = buckets.map(b => `
+      <div class="kpi-card" style="border-top-color:${b.color};">
+        <div class="kpi-label">${b.label}</div>
+        <div class="kpi-value">${fmt.num(b.val)}</div>
+        <div class="kpi-sub">${(b.val / totalD * 100).toFixed(0)}% מהזמנות</div>
+      </div>`).join('');
+    distHtml = `<div class="section-title">💰 התפלגות ערך הזמנות</div><div class="kpi-grid">${bucketCards}</div>`;
+  }
+
+  // ── 6. Coupons ────────────────────────────────────────────────────────────
+  let couponRows = '';
+  (storeData.coupons || []).forEach(c => {
+    const typeLabel = c.type === 'percent' ? `${c.amount}%` : c.type === 'fixed_cart' ? `₪${c.amount} קבוע` : c.type;
+    couponRows += `<tr><td style="font-family:monospace;font-weight:700;">${c.code}</td><td>${typeLabel}</td><td>${fmt.num(c.usageCount)}</td></tr>`;
+  });
+
+  // ── 7. Monthly breakdown ──────────────────────────────────────────────────
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  const fmtM = ym => { if (!ym) return '—'; const [y, m] = ym.split('-'); return `${months[parseInt(m)-1]} ${y}`; };
+  let monthlyRows = '';
+  (storeData.monthly || []).forEach(row => {
+    monthlyRows += `<tr><td>${fmtM(row.month)}</td><td>${fmt.ils(row.revenue)}</td><td>${fmt.num(row.orders)}</td><td>${fmt.ils(row.aov)}</td></tr>`;
+  });
+
+  // ── Weekday Pattern ───────────────────────────────────────────────────────
+  let weekdayHtml = '';
+  if (storeData.weekdayPattern?.length) {
+    const maxOrders = Math.max(...storeData.weekdayPattern.map(d => d.orders), 1);
+    let bars = storeData.weekdayPattern.map(d => {
+      const pct = Math.round((d.orders / maxOrders) * 100);
+      return `<div style="text-align:center;flex:1;">
+        <div style="height:${Math.max(pct, 4)}px;background:var(--accent);border-radius:4px 4px 0 0;opacity:${0.4 + pct / 160};margin-bottom:6px;"></div>
+        <div style="font-size:11px;color:var(--gray);">${d.name}</div>
+        <div style="font-size:12px;font-weight:700;">${fmt.num(d.orders)}</div>
+      </div>`;
+    }).join('');
+    weekdayHtml = `
+    <div class="section-title">📅 הזמנות לפי יום בשבוע</div>
+    <div class="table-wrap">
+      <div style="display:flex;align-items:flex-end;gap:8px;height:120px;padding:12px 8px 0;">${bars}</div>
+    </div>`;
+  }
+
+  return `
+    <div class="section-title">${platformIcon} ${platformName} — ביצועי חנות</div>
+    <div class="kpi-grid">${kpiHtml}</div>
+
+    ${funnelHtml}
+
+    ${productRows ? `
+    <div class="section-title">🏆 מוצרים מובילים</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>מוצר</th><th>כמות</th><th>הכנסה</th><th>הכנסה ליחידה</th><th>% מסה"כ</th></tr></thead>
+      <tbody>${productRows}</tbody>
+    </table></div>` : ''}
+
+    ${categoryRows ? `
+    <div class="section-title">🗂️ קטגוריות מוכרות</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>קטגוריה</th><th>הזמנות</th><th>פריטים</th><th>הכנסה</th><th>%</th></tr></thead>
+      <tbody>${categoryRows}</tbody>
+    </table></div>` : ''}
+
+    ${segHtml}
+
+    ${distHtml}
+
+    ${couponRows ? `
+    <div class="section-title">🏷️ קופונים בשימוש</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>קוד</th><th>סוג הנחה</th><th>שימושים</th></tr></thead>
+      <tbody>${couponRows}</tbody>
+    </table></div>` : ''}
+
+    ${weekdayHtml}
+
+    ${monthlyRows ? `
+    <div class="section-title">📅 פירוט חודשי</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>חודש</th><th>הכנסה</th><th>הזמנות</th><th>AOV</th></tr></thead>
+      <tbody>${monthlyRows}</tbody>
+    </table></div>` : ''}`;
+}
+
+// =============================================
+// PDF EXPORT
+// =============================================
+function downloadPDFReport() {
+  if (!window._reportContext) { alert('אנא הפעל סריקה תחילה'); return; }
+  const clientName = document.getElementById('rpt-client')?.textContent || 'לקוח';
+  const dates      = document.getElementById('rpt-dates')?.textContent  || '—';
+  const generated  = document.getElementById('rpt-generated')?.textContent || '';
+  const doc = buildPrintDocument(clientName, dates, generated,
+    buildPDFOverview(), buildPDFMeta(), buildPDFGoogle(), buildPDFGA4(), buildPDFStore(), buildPDFRecs());
+  const win = window.open('', '_blank', 'width=960,height=750');
+  if (!win) { alert('אפשר חלון פופ-אפ בדפדפן ונסה שוב'); return; }
+  win.document.open(); win.document.write(doc); win.document.close(); win.focus();
+  setTimeout(() => { win.print(); win.close(); }, 700);
+}
+
+function buildPrintDocument(clientName, dates, generated, ovHtml, metaHtml, googleHtml, ga4Html, storeHtml, recsHtml) {
+  return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>דוח פרסום — ${clientName}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;direction:rtl;color:#2c3e50;background:white;font-size:13px;line-height:1.5;}
+  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page-break{page-break-before:always;}.no-break{page-break-inside:avoid;}}
+  .pdf-cover{background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%);color:white;padding:40px 48px;margin-bottom:28px;}
+  .pdf-cover .brand{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px;}
+  .pdf-cover h1{font-size:26px;font-weight:800;margin-bottom:6px;}
+  .pdf-cover .client-name{color:#f5a623;font-size:20px;font-weight:700;margin-bottom:18px;}
+  .pdf-cover .meta-row{display:flex;gap:16px;font-size:12px;color:rgba(255,255,255,0.75);flex-wrap:wrap;}
+  .pdf-cover .meta-row span{background:rgba(255,255,255,0.1);border-radius:20px;padding:4px 12px;}
+  .pdf-section{padding:20px 48px;}
+  .section-title{font-size:16px;font-weight:800;color:#1a1a2e;border-bottom:3px solid #e94560;padding-bottom:7px;margin-bottom:14px;margin-top:4px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
+  .kpi-card{border-radius:10px;padding:14px 12px;border-top:4px solid #2980b9;background:#f8f9fa;}
+  .kpi-card.green{border-top-color:#27ae60;} .kpi-card.red{border-top-color:#e74c3c;} .kpi-card.orange{border-top-color:#e67e22;} .kpi-card.gold{border-top-color:#f5a623;}
+  .kpi-label{font-size:10px;color:#6c757d;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px;}
+  .kpi-value{font-size:20px;font-weight:800;color:#2c3e50;} .kpi-sub{font-size:10px;color:#6c757d;margin-top:2px;}
+  .kpi-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-top:4px;}
+  .badge-green{background:#d4edda;color:#155724;} .badge-orange{background:#fff3cd;color:#856404;} .badge-red{background:#f8d7da;color:#721c24;}
+  .table-wrap{border-radius:10px;overflow:hidden;margin-bottom:14px;border:1px solid #dee2e6;}
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  th{background:#1a1a2e;color:white;padding:8px 10px;text-align:right;font-size:10px;font-weight:700;}
+  td{padding:8px 10px;border-bottom:1px solid #dee2e6;} tr:last-child td{border-bottom:none;}
+  .tag-green{background:#d4edda;color:#155724;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+  .tag-orange{background:#fff3cd;color:#856404;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+  .tag-red{background:#f8d7da;color:#721c24;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;}
+  .rec-list{list-style:none;}
+  .rec-item{border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;border-right:5px solid #2980b9;background:#f8f9fa;}
+  .rec-item.critical{border-right-color:#e74c3c;background:#fff8f8;} .rec-item.warning{border-right-color:#e67e22;background:#fef9e7;} .rec-item.positive{border-right-color:#27ae60;background:#f0faf4;}
+  .rec-num{background:#1a1a2e;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+  .rec-body strong{font-size:12px;font-weight:700;display:block;margin-bottom:2px;} .rec-body p{font-size:11px;color:#6c757d;}
+  .health-bar-wrap{background:#f0f2f5;border-radius:6px;height:8px;width:160px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:10px;}
+  .health-bar-fill{height:100%;border-radius:6px;}
+  .pdf-footer{background:#1a1a2e;color:rgba(255,255,255,0.6);text-align:center;padding:14px;font-size:11px;margin-top:28px;}
+  .pdf-footer strong{color:#f5a623;}
+</style>
+</head>
+<body>
+<div class="pdf-cover">
+  <div class="brand">Ortal Digital — יחזקאל הנביא</div>
+  <h1>דוח פרסום ממומן</h1>
+  <div class="client-name">${clientName}</div>
+  <div class="meta-row">
+    <span>📅 ${dates}</span>
+    <span>הופק: ${generated}</span>
+    <span>📘 Meta &nbsp;|&nbsp; 🎯 Google Ads &nbsp;|&nbsp; 📊 GA4</span>
+  </div>
+</div>
+${ovHtml}
+<div class="page-break"></div>
+${metaHtml}
+<div class="page-break"></div>
+${googleHtml}
+<div class="page-break"></div>
+${ga4Html}
+${storeHtml ? `<div class="page-break"></div>${storeHtml}` : ''}
+<div class="page-break"></div>
+${recsHtml}
+<div class="pdf-footer">הופק על ידי <strong>יחזקאל הנביא</strong> | Ortal Digital | ${generated}</div>
+</body></html>`;
+}
+
+function buildPDFOverview() {
+  const m = window.metaKPIs, g = window.googleTotals, ga4 = window._ga4DataFull?.overview;
+  const isLeads = window._bizType === 'leads';
+  if (!m && !g && !ga4) return '';
+  const totalSpend = (m?.spend || 0) + (g?.spend || 0);
+  const totalRevenue = (m?.revenue || 0) + (g?.convValue || 0);
+  const combinedROAS = totalSpend > 0 ? totalRevenue / totalSpend : 0;
+  const totalLeads = (m?.leads || 0) + (g?.conversions || 0);
+  const totalCPL = totalLeads > 0 ? totalSpend / totalLeads : 0;
+  let cards = '';
+  if (totalSpend > 0) cards += `<div class="kpi-card"><div class="kpi-label">הוצאה כוללת</div><div class="kpi-value">${fmt.ils(totalSpend)}</div><div class="kpi-sub">${m ? 'Meta ' + fmt.ils(m.spend) : ''}${g ? ' + Google ' + fmt.ils(g.spend) : ''}</div></div>`;
+  if (!isLeads) {
+    if (totalRevenue > 0) cards += `<div class="kpi-card green"><div class="kpi-label">שווי רכישות</div><div class="kpi-value">${fmt.ils(totalRevenue)}</div></div>`;
+    if (combinedROAS > 0) cards += `<div class="kpi-card ${combinedROAS >= 3.5 ? 'green' : combinedROAS >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS משולב</div><div class="kpi-value">${fmt.x(combinedROAS)}</div></div>`;
+    if (m) cards += `<div class="kpi-card gold"><div class="kpi-label">רכישות Meta</div><div class="kpi-value">${fmt.num(m.purchases)}</div><div class="kpi-sub">CPA: ${fmt.ils(m.cpa)}</div></div>`;
+    if (g) cards += `<div class="kpi-card"><div class="kpi-label">המרות Google</div><div class="kpi-value">${fmt.num(g.conversions)}</div></div>`;
+  } else {
+    if (totalLeads > 0) cards += `<div class="kpi-card gold"><div class="kpi-label">לידים כולל</div><div class="kpi-value">${fmt.num(totalLeads)}</div></div>`;
+    if (totalCPL > 0) cards += `<div class="kpi-card ${totalCPL < 50 ? 'green' : totalCPL < 200 ? 'orange' : 'red'}"><div class="kpi-label">CPL ממוצע</div><div class="kpi-value">${fmt.ils(totalCPL)}</div></div>`;
+    if (m) cards += `<div class="kpi-card"><div class="kpi-label">לידים Meta</div><div class="kpi-value">${fmt.num(m.leads)}</div><div class="kpi-sub">CPL: ${fmt.ils(m.cpl)}</div></div>`;
+    if (g) cards += `<div class="kpi-card"><div class="kpi-label">לידים Google</div><div class="kpi-value">${fmt.num(g.conversions)}</div></div>`;
+  }
+  return `<div class="pdf-section"><div class="section-title">📊 סקירה כללית</div><div class="kpi-grid">${cards}</div></div>`;
+}
+
+function buildPDFMeta() {
+  const m = window.metaKPIs;
+  if (!m) return '';
+  const isLeads = window._bizType === 'leads';
+  let cards = `<div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(m.spend)}</div></div>`;
+  if (isLeads) {
+    cards += `<div class="kpi-card gold"><div class="kpi-label">לידים</div><div class="kpi-value">${fmt.num(m.leads)}</div></div>`;
+    cards += `<div class="kpi-card ${m.cpl < 50 ? 'green' : m.cpl < 200 ? 'orange' : 'red'}"><div class="kpi-label">CPL</div><div class="kpi-value">${fmt.ils(m.cpl)}</div></div>`;
+  } else {
+    cards += `<div class="kpi-card green"><div class="kpi-label">רכישות</div><div class="kpi-value">${fmt.num(m.purchases)}</div><div class="kpi-sub">CPA: ${fmt.ils(m.cpa)}</div></div>`;
+    cards += `<div class="kpi-card green"><div class="kpi-label">שווי רכישות</div><div class="kpi-value">${fmt.ils(m.revenue)}</div></div>`;
+    cards += `<div class="kpi-card ${m.roas >= 3.5 ? 'green' : m.roas >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS</div><div class="kpi-value">${fmt.x(m.roas)}</div></div>`;
+  }
+  cards += `<div class="kpi-card"><div class="kpi-label">חשיפות</div><div class="kpi-value">${fmt.num(m.impressions)}</div></div>`;
+  cards += `<div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(m.ctr * 100)}</div></div>`;
+
+  let campRows = '';
+  const activeCamps = (m.campaigns || []).filter(c => parseFloat(c.spend || 0) > 0).slice(0, 10);
+  activeCamps.forEach(c => {
+    const cSpend = parseFloat(c.spend || 0);
+    if (isLeads) {
+      const cLeads = metaAction(c.actions, 'lead') + metaAction(c.actions, 'onsite_conversion.lead_grouped');
+      const cCPL = cLeads > 0 ? cSpend / cLeads : 0;
+      campRows += `<tr><td>${c.campaign_name || '—'}</td><td>${fmt.ils(cSpend)}</td><td>${fmt.num(cLeads)}</td><td>${cCPL > 0 ? fmt.ils(cCPL) : '—'}</td></tr>`;
+    } else {
+      const cPurch = metaAction(c.actions, 'purchase');
+      const cRev = parseFloat(c.action_values?.find(a => a.action_type === 'purchase')?.value || 0);
+      const cROAS = cSpend > 0 ? cRev / cSpend : 0;
+      campRows += `<tr><td>${c.campaign_name || '—'}</td><td>${fmt.ils(cSpend)}</td><td>${fmt.num(cPurch)}</td><td>${fmt.ils(cRev)}</td><td>${fmt.x(cROAS)}</td></tr>`;
+    }
+  });
+  const campHead = isLeads ? `<tr><th>קמפיין</th><th>הוצאה</th><th>לידים</th><th>CPL</th></tr>` : `<tr><th>קמפיין</th><th>הוצאה</th><th>רכישות</th><th>שווי רכישות</th><th>ROAS</th></tr>`;
+
+  return `<div class="pdf-section"><div class="section-title">📘 Meta Ads</div><div class="kpi-grid">${cards}</div>
+  ${campRows ? `<div class="table-wrap"><table><thead>${campHead}</thead><tbody>${campRows}</tbody></table></div>` : ''}</div>`;
+}
+
+function buildPDFGoogle() {
+  const g = window.googleTotals, gd = window._ga4DataFull;
+  const gRaw = window._ga4DataFull ? null : null; // placeholder
+  const gData = window._googleDataRaw;
+  if (!g) return '';
+  const isLeads = window._bizType === 'leads';
+  const gCPL = g.conversions > 0 ? g.spend / g.conversions : 0;
+  let cards = `<div class="kpi-card"><div class="kpi-label">הוצאה</div><div class="kpi-value">${fmt.ils(g.spend)}</div></div>`;
+  if (isLeads) {
+    cards += `<div class="kpi-card gold"><div class="kpi-label">לידים</div><div class="kpi-value">${fmt.num(g.conversions)}</div></div>`;
+    cards += `<div class="kpi-card ${gCPL < 50 ? 'green' : gCPL < 200 ? 'orange' : 'red'}"><div class="kpi-label">CPL</div><div class="kpi-value">${fmt.ils(gCPL)}</div></div>`;
+  } else {
+    cards += `<div class="kpi-card ${g.roas >= 3.5 ? 'green' : g.roas >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS</div><div class="kpi-value">${fmt.x(g.roas)}</div></div>`;
+    cards += `<div class="kpi-card green"><div class="kpi-label">שווי רכישות</div><div class="kpi-value">${fmt.ils(g.convValue)}</div></div>`;
+    cards += `<div class="kpi-card"><div class="kpi-label">המרות</div><div class="kpi-value">${fmt.num(g.conversions)}</div></div>`;
+  }
+  cards += `<div class="kpi-card"><div class="kpi-label">קליקים</div><div class="kpi-value">${Math.round(g.clicks).toLocaleString('he-IL')}</div></div>`;
+  cards += `<div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">${fmt.pct(g.ctr)}</div></div>`;
+  return `<div class="pdf-section"><div class="section-title">🎯 Google Ads</div><div class="kpi-grid">${cards}</div></div>`;
+}
+
+function buildPDFGA4() {
+  const ga4 = window._ga4DataFull;
+  if (!ga4) return '';
+  const ov = ga4.overview;
+  const sessions = ov.sessions || 0;
+  const revenue = ov.totalRevenue || 0;
+  const cvr = sessions > 0 ? (ov.conversions / sessions) * 100 : 0;
+  const bounceRate = (ov.bounceRate || 0) * 100;
+  let cards = `<div class="kpi-card green"><div class="kpi-label">הכנסה</div><div class="kpi-value">${fmt.ils(revenue)}</div></div>`;
+  cards += `<div class="kpi-card"><div class="kpi-label">Sessions</div><div class="kpi-value">${fmt.num(sessions)}</div></div>`;
+  cards += `<div class="kpi-card"><div class="kpi-label">CVR</div><div class="kpi-value">${fmt.pct(cvr)}</div></div>`;
+  cards += `<div class="kpi-card ${bounceRate > 55 ? 'orange' : ''}"><div class="kpi-label">Bounce Rate</div><div class="kpi-value">${fmt.pct(bounceRate)}</div></div>`;
+
+  let devRows = '';
+  ga4.devices.forEach(d => {
+    const cvrVal = (d.sessionConversionRate || 0) * 100;
+    devRows += `<tr><td>${d.deviceCategory}</td><td>${fmt.num(d.sessions)}</td><td>${fmt.ils(d.totalRevenue)}</td><td>${fmt.pct(cvrVal)}</td><td>${fmt.pct((d.bounceRate || 0) * 100)}</td></tr>`;
+  });
+
+  let chRows = '';
+  ga4.channels.forEach(ch => {
+    chRows += `<tr><td>${ch.sessionDefaultChannelGroup || '—'}</td><td>${fmt.ils(ch.totalRevenue)}</td></tr>`;
+  });
+
+  return `<div class="pdf-section"><div class="section-title">📊 GA4</div><div class="kpi-grid">${cards}</div>
+  ${devRows ? `<div class="table-wrap"><table><thead><tr><th>מכשיר</th><th>Sessions</th><th>הכנסה</th><th>CVR</th><th>Bounce</th></tr></thead><tbody>${devRows}</tbody></table></div>` : ''}
+  ${chRows ? `<div class="table-wrap"><table><thead><tr><th>מקור תנועה</th><th>הכנסה</th></tr></thead><tbody>${chRows}</tbody></table></div>` : ''}</div>`;
+}
+
+function buildPDFStore() {
+  const sd = window._storeData;
+  if (!sd || sd.error) return '';
+  const s = sd.summary;
+  const isShopify = sd.platform === 'shopify';
+  const platformIcon = isShopify ? '🛍️' : '🔌';
+  const platformName = isShopify ? 'Shopify' : 'WooCommerce';
+  const adSpend = (window.metaKPIs?.spend || 0) + (window.googleTotals?.spend || 0);
+  let cards = `<div class="kpi-card green"><div class="kpi-label">הכנסה</div><div class="kpi-value">${fmt.ils(s.revenue)}</div></div>`;
+  cards += `<div class="kpi-card gold"><div class="kpi-label">הזמנות</div><div class="kpi-value">${fmt.num(s.orders)}</div></div>`;
+  cards += `<div class="kpi-card"><div class="kpi-label">AOV</div><div class="kpi-value">${fmt.ils(s.aov)}</div></div>`;
+  if (adSpend > 0) {
+    const sr = s.revenue / adSpend;
+    cards += `<div class="kpi-card ${sr >= 3.5 ? 'green' : sr >= 2 ? 'orange' : 'red'}"><div class="kpi-label">ROAS מול חנות</div><div class="kpi-value">${fmt.x(sr)}</div></div>`;
+  }
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  const fmtM = ym => { if (!ym) return '—'; const [y, m] = ym.split('-'); return `${months[parseInt(m)-1]} ${y}`; };
+  let mRows = '';
+  (sd.monthly || []).forEach(r => { mRows += `<tr><td>${fmtM(r.month)}</td><td>${fmt.ils(r.revenue)}</td><td>${fmt.num(r.orders)}</td><td>${fmt.ils(r.aov)}</td></tr>`; });
+  let pRows = '';
+  (sd.topProducts || []).slice(0, 10).forEach((p, i) => { pRows += `<tr><td>${i+1}. ${p.name}</td><td>${fmt.num(p.quantity)}</td><td>${fmt.ils(p.revenue)}</td></tr>`; });
+  return `<div class="pdf-section"><div class="section-title">${platformIcon} ${platformName}</div><div class="kpi-grid">${cards}</div>
+  ${mRows ? `<div class="table-wrap"><table><thead><tr><th>חודש</th><th>הכנסה</th><th>הזמנות</th><th>AOV</th></tr></thead><tbody>${mRows}</tbody></table></div>` : ''}
+  ${pRows ? `<div class="table-wrap"><table><thead><tr><th>מוצר</th><th>כמות</th><th>הכנסה</th></tr></thead><tbody>${pRows}</tbody></table></div>` : ''}</div>`;
+}
+
+function buildPDFRecs() {
+  const m = window.metaKPIs, gd = window._ga4DataFull;
+  const isLeads = window._bizType === 'leads';
+  const recs = [];
+  if (m) {
+    if (m.frequency > 6) recs.push({ level: 'critical', title: '🔴 Frequency קריטי ב-Meta', body: `Frequency ${fmt.f(m.frequency)} — רענן קריאייטיב מיידית.` });
+    else if (m.frequency > 4) recs.push({ level: 'warning', title: '⚠️ Frequency גבוה ב-Meta', body: `Frequency ${fmt.f(m.frequency)} — שקול רענון.` });
+    if (isLeads) {
+      if (m.cpl > 200 && m.spend > 0) recs.push({ level: 'warning', title: `⚠️ CPL Meta גבוה — ${fmt.ils(m.cpl)}`, body: 'בדוק targeting וקריאייטיב.' });
+      else if (m.cpl > 0 && m.cpl < 50) recs.push({ level: 'positive', title: `✅ CPL Meta ${fmt.ils(m.cpl)} — מצוין`, body: 'שקול להגדיל תקציב.' });
+    } else {
+      if (m.roas > 5) recs.push({ level: 'positive', title: `✅ ROAS Meta ${fmt.x(m.roas)} — מצוין`, body: 'שקול להגדיל תקציב.' });
+      else if (m.roas < 2 && m.spend > 0) recs.push({ level: 'warning', title: '⚠️ ROAS Meta נמוך', body: `ROAS ${fmt.x(m.roas)}.` });
+    }
+  }
+  if (gd) {
+    const mob = gd.devices.find(d => d.deviceCategory === 'mobile');
+    const desk = gd.devices.find(d => d.deviceCategory === 'desktop');
+    if (mob && desk) {
+      const mCVR = (mob.sessionConversionRate || 0) * 100;
+      const dCVR = (desk.sessionConversionRate || 0) * 100;
+      if (dCVR > 0 && mCVR > 0 && dCVR / mCVR > 2) recs.push({ level: 'critical', title: `🔴 פער Mobile CVR`, body: `Mobile ${fmt.pct(mCVR)} לעומת Desktop ${fmt.pct(dCVR)}.` });
+    }
+  }
+  if (recs.length === 0) return `<div class="pdf-section"><div class="section-title">💡 המלצות</div><p style="color:#6c757d;font-size:13px;">לא נמצאו בעיות מהנתונים שנמשכו.</p></div>`;
+  const order = { critical: 0, warning: 1, positive: 2 };
+  recs.sort((a, b) => order[a.level] - order[b.level]);
+  let html = `<div class="pdf-section"><div class="section-title">💡 המלצות לפי עדיפות</div><ul class="rec-list">`;
+  recs.forEach((r, i) => { html += `<li class="rec-item ${r.level}"><div class="rec-num">${i + 1}</div><div class="rec-body"><strong>${r.title}</strong><p>${r.body}</p></div></li>`; });
+  html += `</ul></div>`;
+  return html;
+}
+
+// Store raw google data for PDF
+const _origBuildReport = buildReport;
+
+// =============================================
+// CHAT WIDGET
+// =============================================
+// =============================================
+// PER-TAB DATE PILLS
+// =============================================
+function buildDatePills(platform, activeDays) {
+  const days = [7, 14, 30, 60, 90];
+  const pills = days.map(d =>
+    `<button class="date-pill${activeDays === d ? ' active' : ''}" onclick="refetchTab('${platform}', ${d})">${d} ימים</button>`
+  ).join('');
+  return `<div class="tab-date-bar"><span class="pill-label">טווח:</span>${pills}</div>`;
+}
+
+async function refetchTab(platform, days) {
+  const p = window._scanParams;
+  if (!p) return;
+  const to = new Date();
+  const from = new Date();
+  from.setDate(from.getDate() - days);
+  const fmtD = d => d.toISOString().split('T')[0];
+  const dateFrom = fmtD(from), dateTo = fmtD(to);
+  window._tabDays[platform] = days;
+  const tabEl = document.getElementById('tab-' + platform);
+  if (!tabEl) return;
+  const pillsHTML = buildDatePills(platform, days);
+  tabEl.innerHTML = pillsHTML + `<div class="tab-loading-overlay"><span class="tab-spinner"></span> מושך נתונים ל-${days} ימים...</div>`;
+  const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
+  try {
+    if (platform === 'meta') {
+      const d = await post('/api/meta', { accountId: p.metaId, dateFrom, dateTo });
+      const kpis = computeMetaKPIs(d);
+      tabEl.innerHTML = pillsHTML + buildMetaTabBody(d, kpis);
+    } else if (platform === 'google') {
+      const d = await post('/api/google-ads', { customerId: p.googleId, dateFrom, dateTo });
+      const totals = computeGoogleTotals(d);
+      tabEl.innerHTML = pillsHTML + buildGoogleTabBody(d, totals);
+    } else if (platform === 'ga4') {
+      const d = await post('/api/ga4', { propertyId: p.ga4Prop, dateFrom, dateTo });
+      tabEl.innerHTML = pillsHTML + buildGA4TabBody(d);
+    }
+  } catch (e) {
+    tabEl.innerHTML = pillsHTML + `<div class="tab-loading-overlay" style="color:var(--red)">❌ שגיאה: ${e.message}</div>`;
+  }
+}
+
+function toggleChat() { document.getElementById('chatPanel').classList.toggle('open'); }
+
+function addChatMsg(role, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  const msgs = document.getElementById('chat-messages');
+  msgs.appendChild(div);
+  msgs.scrollTop = 9999;
+  return div;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addChatMsg('user', msg);
+  const botDiv = addChatMsg('bot', '...');
+  const context = window._reportContext || 'אין נתוני דוח.';
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, context })
+    });
+    const d = await r.json();
+    botDiv.textContent = d.reply || d.error || 'שגיאה בתשובה';
+  } catch (e) {
+    botDiv.textContent = 'שגיאה בחיבור';
+  }
+}
+</script>
+</body>
+</html>
