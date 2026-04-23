@@ -3,6 +3,7 @@ services:
     name: ezekiel-the-prophet
     runtime: node
     plan: free
+    branch: master
     buildCommand: npm ci
     startCommand: node server.js
     envVars:
