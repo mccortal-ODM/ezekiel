@@ -2,11 +2,12 @@ services:
   - type: web
     name: ezekiel-the-prophet
     runtime: node
-    buildCommand: npm install
-    startCommand: npm start
+    plan: free
+    buildCommand: npm ci
+    startCommand: node server.js
     envVars:
       - key: NODE_VERSION
-        value: 20
+        value: 20.11.0
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: META_ACCESS_TOKEN
